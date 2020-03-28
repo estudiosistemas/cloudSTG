@@ -1,4 +1,5 @@
 sigma-master
+settings_original.py
 
 #frontend statics files
 frontend/static/frontend/dist
