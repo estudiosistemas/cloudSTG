@@ -1,0 +1,50 @@
+sigma-master
+
+#frontend statics files
+frontend/static/frontend/dist
+frontend/static/frontend/plugins
+
+# IDEs
+.project
+.pydevproject
+.idea
+.vscode
+.settings
+
+# Random files
+*~
+\#*
+
+venv/
+htmlcov/
+src/static_dist/
+src/static_root/
+
+# Python compiled byte code
+*.pyc
+__pycache__
+
+# SQLite3 database
+*.sqlite3
+
+# Node modules
+node_modules/
+yarn.lock
+npm-debug.log
+
+# Coverage 
+coverage/
+.coverage
+.cache
+
+# static validation files
+.eslintrc
+.sass-lint.yml
+.prospector.yml
+.coveragerc
+
+# in case we run shippable tests don't include it
+shippable/
+
+# not include scripts because they come from external module
+scripts/

@@ -1,0 +1,1 @@
+export const CREATE_MESSAGE = "SHOW_MESSAGE";

@@ -1,0 +1,10 @@
+export const SHOW_FORM_CLIENTE = "SHOW_FORM_CLIENTE";
+
+export const GET_CLIENTES = "GET_CLIENTES";
+export const DELETE_CLIENTE = "DELETE_CLIENTE";
+export const ADD_CLIENTE = "ADD_CLIENTE";
+export const UPDATE_CLIENTE = "UPDATE_CLIENTE";
+
+export const SET_CLIENTE = "SET_CLIENTE";
+
+export const TOGGLE_ESTADO = "TOGGLE_ESTADO";
