@@ -6,6 +6,10 @@ runserver.bat
 frontend/static/frontend/dist
 frontend/static/frontend/plugins
 
+#MIGRATIONS
+migrations
+
+
 # IDEs
 .project
 .pydevproject
@@ -26,11 +30,8 @@ src/static_root/
 *.pyc
 __pycache__
 
-#MIGRATIONS
-migrations
-
 # SQLite3 database
-*.sqlite3
+#*.sqlite3
 
 # Node modules
 node_modules/
