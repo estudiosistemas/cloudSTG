@@ -4,7 +4,6 @@ runserver.bat
 
 #frontend statics files
 frontend/static/frontend/dist
-frontend/static/frontend/plugins
 
 #MIGRATIONS
 migrations
