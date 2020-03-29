@@ -26,6 +26,9 @@ src/static_root/
 *.pyc
 __pycache__
 
+#MIGRATIONS
+migrations
+
 # SQLite3 database
 *.sqlite3
 
