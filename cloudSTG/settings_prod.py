@@ -8,14 +8,21 @@ ALLOWED_HOSTS = ['172.105.148.177', '192.168.232.139']
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'cloudstg',
+#         'USER': 'mcosta',
+#         'PASSWORD': 'Ro190180',
+#         'PORT': 5432,
+#         'HOST': 'localhost'
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'cloudstg',
-        'USER': 'mcosta',
-        'PASSWORD': 'Ro190180',
-        'PORT': 5432,
-        'HOST': 'localhost'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
