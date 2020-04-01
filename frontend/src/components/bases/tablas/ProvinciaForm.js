@@ -79,6 +79,7 @@ const ProvinciaForm = ({ editar }) => {
                     disabled={editar}
                     value={codigo}
                     size="50"
+                    maxlength="1"
                   />
                   <label htmlFor="in">Código</label>
                 </span>

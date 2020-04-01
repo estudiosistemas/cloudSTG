@@ -4,7 +4,13 @@ import globalContext from "../../context/global/globalContext";
 
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
-import { isEmpty } from "../common/CoustomFunctions";
+import { InputMask } from "primereact/inputmask";
+import { Checkbox } from "primereact/checkbox";
+import { Calendar } from "primereact/calendar";
+
+import { calendar_locale_es } from "../common/component_constants";
+
+import { isEmpty, dateCalendarToSave } from "../common/CoustomFunctions";
 
 import useTipo_Documento from "../../hooks/useTipo_Documento";
 import useCondicionIva from "../../hooks/useCondicionIva";
@@ -27,10 +33,13 @@ const ClientesForm = ({ editar }) => {
     tipo_documento,
     nro_documento,
     iva,
+    codigo_postal,
     domicilio,
     telefono,
     email,
-    representante
+    representante,
+    seguro_propio,
+    seguro_propio_vencimiento
   } = cliente;
 
   //global state
@@ -65,34 +74,48 @@ const ClientesForm = ({ editar }) => {
 
   const handleSubmit = () => {
     //valido formulario
-    if (isEmpty(nombre) | (stateTipo_Documento == undefined)) {
+    if (
+      isEmpty(nombre) |
+      (stateTipo_Documento == undefined) |
+      (stateCondicionIva == undefined) |
+      (stateCodigoPostal == undefined)
+    ) {
       showMessage({
-        msg: "Hay campos vacíos",
+        msg: "Los campos con * son obligatorios.",
         title: "Error",
         type: "error"
       });
     } else {
       //Agrego
+      //Doy formato a la fecha del seguro
+      const miVtoSeguro = dateCalendarToSave(seguro_propio_vencimiento);
+
       const miCliente = {
-        nombre,
-        tipo_documento: stateTipo_Documento
+        ...cliente,
+        tipo_documento: stateTipo_Documento,
+        iva: stateCondicionIva,
+        codigo_postal: stateCodigoPostal,
+        seguro_propio_vencimiento: miVtoSeguro
       };
+
       if (!editar) {
         addCliente(miCliente);
         //Reseteo el form
-        setCliente({
-          nombre: "",
-          provincia: {}
-        });
+        //setCliente({
+        //  nombre: "",
+        //  provincia: {}
+        //});
       } else {
         updateCliente(miCliente);
       }
     }
   };
 
-  // useEffect(() => {
-  //   actualizarStateTipo_Documento(tipo_documento);
-  // }, [cp]);
+  useEffect(() => {
+    actualizarStateTipo_Documento(tipo_documento);
+    actualizarStateCodigoPostal(codigo_postal);
+    actualizarStateCondicionIva(iva);
+  }, [tipo_documento, codigo_postal, iva]);
 
   return (
     <Fragment>
@@ -104,12 +127,13 @@ const ClientesForm = ({ editar }) => {
                 {editar ? <h1>Editar Cliente</h1> : <h1>Agregar Cliente</h1>}
               </div>
               <div className="p-col-12 p-md-6">
-                <label style={{ marginTop: "1em" }}>Nombre/Razón Social</label>
+                <label style={{ marginTop: "1em" }}>Nombre/Razón Social*</label>
                 <InputText
                   id="nombre"
                   name="nombre"
                   value={nombre}
                   onChange={onChange}
+                  maxLength="150"
                   autoFocus
                 />
               </div>
@@ -117,7 +141,7 @@ const ClientesForm = ({ editar }) => {
               <div className="p-col-6"></div>
 
               <div className="p-col-12 p-md-4">
-                <label style={{ marginTop: "1em" }}>Tipo Documento</label>
+                <label style={{ marginTop: "1em" }}>Tipo Documento*</label>
                 <SelectTipo_Documento />
               </div>
 
@@ -129,13 +153,14 @@ const ClientesForm = ({ editar }) => {
                   name="nro_documento"
                   onChange={onChange}
                   value={nro_documento}
+                  maxLength="11"
                 />
               </div>
 
               <div className="p-col-6"></div>
 
               <div className="p-col-12 p-md-6">
-                <label style={{ marginTop: "1em" }}>Cond. I.V.A.</label>
+                <label style={{ marginTop: "1em" }}>Cond. I.V.A.*</label>
                 <SelectCondicionIva />
               </div>
 
@@ -149,11 +174,12 @@ const ClientesForm = ({ editar }) => {
                   name="domicilio"
                   onChange={onChange}
                   value={domicilio}
+                  maxLength="150"
                 />
               </div>
               <div className="p-col-6"></div>
               <div className="p-col-12 p-md-6">
-                <label style={{ marginTop: "1em" }}>Localidad</label>
+                <label style={{ marginTop: "1em" }}>Localidad*</label>
                 <SelectCodigoPostal />
               </div>
 
@@ -167,6 +193,7 @@ const ClientesForm = ({ editar }) => {
                   name="telefono"
                   onChange={onChange}
                   value={telefono}
+                  maxLength="150"
                 />
               </div>
               <div className="p-col-6"></div>
@@ -178,6 +205,7 @@ const ClientesForm = ({ editar }) => {
                   name="email"
                   onChange={onChange}
                   value={email}
+                  maxLength="150"
                 />
               </div>
 
@@ -191,10 +219,48 @@ const ClientesForm = ({ editar }) => {
                   name="representante"
                   onChange={onChange}
                   value={representante}
+                  maxLength="150"
                 />
               </div>
               <div className="p-col-12 p-md-6"></div>
-
+              <div className="p-col-12 p-md-3">
+                <label style={{ marginTop: "1em", marginRight: "1em" }}>
+                  Seguro Propio
+                </label>
+                <Checkbox
+                  checked={seguro_propio}
+                  onChange={e => {
+                    setCliente({
+                      ...cliente,
+                      seguro_propio: e.checked
+                    });
+                  }}
+                />
+              </div>
+              <div className="p-col-12 p-md-3">
+                <Calendar
+                  value={seguro_propio_vencimiento}
+                  onChange={e => {
+                    setCliente({
+                      ...cliente,
+                      seguro_propio_vencimiento: e.value
+                    });
+                  }}
+                  locale={calendar_locale_es}
+                  dateFormat="dd/mm/yy"
+                  placeholder="Fecha Vencimiento Seguro"
+                  showIcon={true}
+                  disabled={!seguro_propio}
+                />
+                {/* <InputMask
+                  mask="99/99/9999"
+                  value={seguro_propio_vencimiento}
+                  placeholder="99/99/9999"
+                  slotChar="dd/mm/yyyy"
+                  onChange={onChange}
+                ></InputMask> */}
+              </div>
+              <div className="p-col-12 p-md-6"></div>
               <div className="p-col-12 p-md-2">
                 <Button
                   style={{ marginTop: "1em" }}

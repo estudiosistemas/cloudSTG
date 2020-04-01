@@ -99,7 +99,7 @@ const CondicionIVAState = props => {
           type: UPDATE_CONDICION,
           payload: condicion
         });
-        alert.success("Condición de IVA modificada...");
+        //alert.success("Condición de IVA modificada...");
       })
       .catch(err => console.log(err.response.data.detail));
   };

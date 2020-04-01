@@ -30,7 +30,7 @@ const ClienteState = props => {
 
   //auth state
   const authCtx = useContext(authContext);
-  const { tokenConfig } = authCtx;
+  const { tokenConfig, user } = authCtx;
 
   //global state
   const GlobalCtx = useContext(globalContext);
@@ -87,15 +87,19 @@ const ClienteState = props => {
   //ADD
   const addCliente = cliente => {
     const miCliente = {
-      codigo: cliente.codigo,
-      localidad: cliente.localidad,
-      provincia_codigo: cliente.provincia.codigo
+      ...cliente,
+      tipo_documento: cliente.tipo_documento.codigo,
+      iva: cliente.iva.id,
+      codigo_postal: cliente.codigo_postal.codigo
     };
     axios
       .post("/api/clientes/", miCliente, tokenConfig())
       .then(res => {
-        //dispatch(returnNoErrors());
-        //dispatch(createMessage({ addProvincia: "Provincia Agregada" }));
+        showMessage({
+          msg: "Cliente agregado correctamente",
+          title: "Clientes",
+          type: "success"
+        });
         dispatch({
           type: ADD_CLIENTE,
           payload: res.data
@@ -103,7 +107,11 @@ const ClienteState = props => {
       })
       .catch(
         err => {
-          console.log(err.response.data.codigo[0]);
+          showMessage({
+            msg: err.response.data.nro_documento[0],
+            title: "Clientes",
+            type: "error"
+          });
         }
         //dispatch(returnErrors(err.response.data, err.response.status))
       );
@@ -112,23 +120,31 @@ const ClienteState = props => {
   //UPDATE
   const updateCliente = cliente => {
     const miCliente = {
-      codigo: cliente.id,
-      localidad: cliente.localidad,
-      provincia_codigo: cliente.provincia.codigo
+      ...cliente,
+      tipo_documento: cliente.tipo_documento.codigo,
+      iva: cliente.iva.id,
+      codigo_postal: cliente.codigo_postal.codigo
     };
+
     axios
-      .put(`/api/codigospostales/${cliente.id}/`, miCliente, tokenConfig())
+      .put(`/api/clientes/${cliente.id}/`, miCliente, tokenConfig())
       .then(res => {
-        //dispatch(returnNoErrors());
-        //dispatch(createMessage({ addProvincia: "Provincia Agregada" }));
+        showMessage({
+          msg: "Cliente actualizado correctamente",
+          title: "Clientes",
+          type: "success"
+        });
         dispatch({
           type: UPDATE_CLIENTE,
           payload: cliente
         });
       })
-      .catch(
-        err => console.log(err.response.data.detail)
-        //dispatch(returnErrors(err.response.data, err.response.status))
+      .catch(err =>
+        showMessage({
+          msg: err.response.data.nro_documento[0],
+          title: "Clientes",
+          type: "error"
+        })
       );
   };
 

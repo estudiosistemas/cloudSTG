@@ -5,7 +5,7 @@ from agencias.models import Cobrador, Zona, Tarifa, Agencia
 
 # MODELO CLIENTE
 class Cliente(MyModel):
-    nombre = models.CharField(max_length=150)
+    nombre = models.CharField(max_length=150, null=False)
     tipo_documento = models.ForeignKey(
         Tipo_Documento, on_delete=models.CASCADE)
     nro_documento = models.CharField(
@@ -16,8 +16,8 @@ class Cliente(MyModel):
     telefono = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(max_length=150, blank=True, null=True)
     representante = models.CharField(max_length=150, blank=True, null=True)
-    seguro_propio = models.BooleanField
-    seguro_propio_vencimiento = models.DateField
+    seguro_propio = models.BooleanField(default=False)
+    seguro_propio_vencimiento = models.DateField(null=True)
 
     def __str__(self):
         return '{}'.format(self.nombre)

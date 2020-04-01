@@ -21,7 +21,7 @@ class Agencias_UserSerializer(serializers.ModelSerializer):
 class CobradorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cobrador
-        fields = ['id', 'nombre']
+        fields = '__all__'
 
 
 class TarifaSerializer(serializers.ModelSerializer):

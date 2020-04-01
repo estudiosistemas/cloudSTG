@@ -108,7 +108,7 @@ function CondicionIVA(props) {
               paginator={true}
               rows={10}
               rowsPerPageOptions={[5, 10, 20, 50]}
-              sortField="nombre"
+              sortField="id"
               sortOrder={1}
             >
               <Column
@@ -117,8 +117,14 @@ function CondicionIVA(props) {
                 sortable={true}
                 style={{ width: "150px", textAlign: "center" }}
               />
-              <Column field="nombre" header="Condicion IVA" sortable={true} />
 
+              <Column
+                field="codigo_afip"
+                header="Código AFIP"
+                sortable={false}
+                style={{ width: "150px", textAlign: "center" }}
+              />
+              <Column field="nombre" header="Condicion IVA" sortable={true} />
               <Column
                 body={actionTemplate}
                 style={{ textAlign: "center", width: "8em" }}

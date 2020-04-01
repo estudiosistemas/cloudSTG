@@ -21,6 +21,11 @@ class Agencias_User(APIView):
         return Response(data)
 
 
+class CobradorViewSet(GetPermisionViewSet):
+    serializer_class = CobradorSerializer
+    queryset = Cobrador.objects.all().order_by('nombre')
+
+
 class Cobrador_Agencia(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = CobradorSerializer

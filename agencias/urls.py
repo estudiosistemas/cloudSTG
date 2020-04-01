@@ -1,9 +1,9 @@
 from django.urls import path, include
 from rest_framework import routers
-from .api import Agencias_User, Cobrador_Agencia, Tarifa_Agencia, Zona_Agencia
+from .api import Agencias_User, Cobrador_Agencia, Tarifa_Agencia, Zona_Agencia, CobradorViewSet
 
-# router = routers.DefaultRouter()
-# router.register('api/cobradores', CobradorViewSet, 'cobradores')
+router = routers.DefaultRouter()
+router.register('api/cobradores', CobradorViewSet, 'cobradores')
 
 urlpatterns = [
     path('api/auth/agenciasusuario/<str:codigo>',
@@ -14,6 +14,6 @@ urlpatterns = [
          Tarifa_Agencia.as_view(), name='tarifa_agencia'),
     path('api/zona-agencia/<str:agencia>',
          Zona_Agencia.as_view(), name='zona_agencia'),
-    #path('', include(router.urls)),
+    path('', include(router.urls)),
 
 ]

@@ -51,17 +51,18 @@ class Comprobante_PtoVenta(MyModel):
 
 class Cobrador(MyModel):
     agencia = models.ForeignKey(Agencia, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=100, null=False, blank=False)
     domicilio = models.CharField(max_length=100, null=True, blank=True)
     telefono = models.CharField(max_length=100, null=True, blank=True)
-    comision = models.DecimalField
+    comision = models.DecimalField(max_digits=4, decimal_places=2, default=0)
 
     def __str__(self):
         return '{}'.format(self.nombre)
 
     def save(self, *args, **kwargs):
         self.nombre = self.nombre.upper()
-        self.domicilio = self.domicilio.upper()
+        if self.domicilio:
+            self.domicilio = self.domicilio.upper()
         super(Cobrador, self).save(*args, **kwargs)
 
     class Meta:

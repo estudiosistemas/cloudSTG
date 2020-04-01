@@ -17,7 +17,7 @@ const CondicionIVAForm = ({ editar }) => {
     setCondicion
   } = condicionIVACtx;
 
-  const { id, nombre } = condicion;
+  const { id, codigo_afip, nombre } = condicion;
 
   //global state
   const GlobalCtx = useContext(globalContext);
@@ -34,7 +34,9 @@ const CondicionIVAForm = ({ editar }) => {
     e.preventDefault();
 
     //valido formulario
-    if (isEmpty(id) | isEmpty(nombre)) {
+    if (isEmpty(codigo_afip) | isEmpty(nombre)) {
+      console.log(isEmpty(codigo_afip));
+      console.log(isEmpty(nombre));
       showMessage({
         msg: "Hay campos vacíos",
         title: "Error",
@@ -43,14 +45,16 @@ const CondicionIVAForm = ({ editar }) => {
     } else {
       //Agrego
       if (!editar) {
-        addCondicion({ nombre });
+        addCondicion({ codigo_afip, nombre });
         //Reseteo el form
         setCondicion({
-          nombre: ""
+          nombre: "",
+          codigo_afip: ""
         });
       } else {
         updateCondicion(condicion);
       }
+      mostrarFormularioCondiciones();
     }
   };
 
@@ -84,6 +88,23 @@ const CondicionIVAForm = ({ editar }) => {
                     />
                     <label htmlFor="id">Id</label>
                   </span>
+
+                  <span
+                    className="p-float-label"
+                    style={{ margin: "25px 0px 0px 0px" }}
+                  >
+                    <InputText
+                      id="codAfip"
+                      name="codigo_afip"
+                      onChange={onChange}
+                      value={codigo_afip}
+                      size="50"
+                      autoFocus
+                      keyfilter="pnum"
+                    />
+                    <label htmlFor="codAfip">Código AFIP</label>
+                  </span>
+
                   <span
                     className="p-float-label"
                     style={{ margin: "25px 0px 25px 0px" }}
@@ -92,7 +113,6 @@ const CondicionIVAForm = ({ editar }) => {
                       id="nombre"
                       name="nombre"
                       onChange={onChange}
-                      autoFocus
                       value={nombre}
                       size="50"
                     />

@@ -33,6 +33,8 @@ import Profile from "../accounts/Profile";
 import Clientes from "../clientes/Clientes";
 import Notificaciones from "../notificaciones/Notificaciones";
 import Dashboard from "./Dashboard";
+import CobradorState from "../../context/agencias/cobradores/cobradorState";
+import Cobradores from "../agencias/cobradores/Cobradores";
 
 const Stg = props => {
   const [layoutMode, setlayoutMode] = useState("static");
@@ -119,6 +121,40 @@ const Stg = props => {
       ]
     },
     {
+      label: "Agencia",
+      icon: "pi pi-fw pi-cog",
+      items: [
+        {
+          label: "Configuración",
+          icon: "pi pi-fw pi-bars",
+          command: () => {
+            history.push("/stg");
+          }
+        },
+        {
+          label: "Cobradores",
+          icon: "pi pi-fw pi-bars",
+          command: () => {
+            history.push("/stg/cobradores");
+          }
+        },
+        {
+          label: "Zonas",
+          icon: "pi pi-fw pi-bars",
+          command: () => {
+            history.push("/stg/zonas");
+          }
+        },
+        {
+          label: "Tarifas",
+          icon: "pi pi-fw pi-bars",
+          command: () => {
+            history.push("/stg/tarifas");
+          }
+        }
+      ]
+    },
+    {
       label: "Tablas del Sistema",
       icon: "pi pi-fw pi-cog",
       items: [
@@ -152,7 +188,6 @@ const Stg = props => {
         }
       ]
     },
-
     {
       label: "Components",
       icon: "pi pi-fw pi-globe",
@@ -381,6 +416,14 @@ const Stg = props => {
               }}
             />
           </CondicionIVAState>
+          <CobradorState>
+            <Route
+              path="/stg/cobradores"
+              render={props => {
+                return <Cobradores {...props} />;
+              }}
+            />
+          </CobradorState>
           <Route
             path="/stg/agencias"
             render={props => {

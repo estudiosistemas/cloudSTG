@@ -127,7 +127,7 @@ class Empresa(MyModel):
     cuit = models.CharField(max_length=150)
     inicio_actividades = models.DateField(null=True, blank=True)
     iibb = models.CharField(max_length=50)
-    logo = models.ImageField(upload_to='logo_pics')
+    logo = models.ImageField(upload_to='logo_pics', null=True, blank=True)
 
     def __str__(self):
         return '{}'.format(self.nombre)

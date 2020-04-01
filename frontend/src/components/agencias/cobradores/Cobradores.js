@@ -1,6 +1,7 @@
 import React, { useEffect, Fragment, useState, useContext } from "react";
 
-import clienteContext from "../../context/clientes/clienteContext";
+import cobradorContext from "../../../context/agencias/cobradores/cobradorContext";
+import authContext from "../../../context/auth/authContext";
 
 //Prime-React
 import { DataTable } from "primereact/datatable";
@@ -9,15 +10,12 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import classNames from "classnames";
-import ClientesForm from "./ClientesForm";
-import Moment from "react-moment";
-import "moment/locale/es";
+import CobradoresForm from "./CobradoresForm";
 
-import SidebarInactivar from "../common/SidebarInactivar";
-import TablasActionTemplate from "../common/TablasActionTemplate";
-import moment from "moment";
+import SidebarInactivar from "../../common/SidebarInactivar";
+import TablasActionTemplate from "../../common/TablasActionTemplate";
 
-function Clientes(props) {
+function Cobradores(props) {
   const [sidebarState, setSideBarState] = useState({ visible: false });
   const [editar, setEditar] = useState(false);
 
@@ -29,33 +27,33 @@ function Clientes(props) {
   const [loadingData, setLoadingData] = useState(true);
 
   //local state
-  const clienteCtx = useContext(clienteContext);
+  const cobradorCtx = useContext(cobradorContext);
   const {
-    clientes,
+    cobradores,
     mostrarFormulario,
-    getClientes,
-    setCliente,
-    toggleEstadoCliente
-  } = clienteCtx;
+    getCobradores,
+    setCobrador,
+    toggleEstadoCobrador
+  } = cobradorCtx;
+
+  //auth state
+  const authCtx = useContext(authContext);
+  const { agencia } = authCtx;
 
   const setEstado = data => {
-    setCliente(data);
+    setCobrador(data);
     data.estado = !data.estado;
-    toggleEstadoCliente(data);
+    toggleEstadoCobrador(data);
   };
 
   const handleAgregar = () => {
     setEditar(false);
-    setCliente({});
+    setCobrador({});
     mostrarFormulario();
   };
 
   const handleEditar = dato => {
-    let miFechaVto = null;
-    if (dato.seguro_propio_vencimiento) {
-      miFechaVto = moment(dato.seguro_propio_vencimiento).toDate();
-    }
-    setCliente({ ...dato, seguro_propio_vencimiento: miFechaVto });
+    setCobrador(dato);
     setEditar(true);
     mostrarFormulario();
   };
@@ -63,12 +61,6 @@ function Clientes(props) {
   const handleInhabilitar = item => {
     setSelectedItem(item);
     toggleSidebar();
-  };
-
-  const handleSetup = item => {
-    alert("Proximamente!");
-    //setSelectedItem(item);
-    //toggleSidebar();
   };
 
   const estadoTemplate = rowData => {
@@ -87,7 +79,6 @@ function Clientes(props) {
         //handleBorrar={handleBorrar}
         handleEditar={handleEditar}
         handleInhabilitar={handleInhabilitar}
-        handleSetup={handleSetup}
         rowData={rowData}
       />
     );
@@ -121,10 +112,6 @@ function Clientes(props) {
   );
 
   const rowExpansionTemplate = data => {
-    let vencido = false;
-    if (moment().diff(data.seguro_propio_vencimiento, "days") > 0) {
-      vencido = true;
-    }
     return (
       <div className="p-grid p-fluid" style={{ padding: "2em 1em 1em 1em" }}>
         <div className="p-col-12 p-md-6">
@@ -137,17 +124,9 @@ function Clientes(props) {
             <div className="p-md-10" style={{ fontWeight: "bold" }}>
               {data.nombre}
             </div>
-            <div className="p-md-2">Documento: </div>
+            <div className="p-md-2">Comisión: </div>
             <div className="p-md-10" style={{ fontWeight: "bold" }}>
-              {data.tipo_documento.nombre} {data.nro_documento}
-            </div>
-            <div className="p-md-2">I.V.A: </div>
-            <div className="p-md-10" style={{ fontWeight: "bold" }}>
-              {data.iva.nombre}
-            </div>
-            <div className="p-md-2">Seguro Propio: </div>
-            <div className="p-md-10" style={{ fontWeight: "bold" }}>
-              {data.seguro_propio ? "Sí" : "No"}
+              {data.comision} %
             </div>
           </div>
         </div>
@@ -158,31 +137,9 @@ function Clientes(props) {
               {data.domicilio}
             </div>
 
-            <div className="p-md-2">Localidad: </div>
-            <div className="p-md-10" style={{ fontWeight: "bold" }}>
-              {`(${data.codigo_postal.codigo}) ${data.codigo_postal.localidad}`}
-            </div>
-
             <div className="p-md-2">Teléfono: </div>
             <div className="p-md-10" style={{ fontWeight: "bold" }}>
               {data.telefono}
-            </div>
-
-            <div className="p-md-2">Representante: </div>
-            <div className="p-md-10" style={{ fontWeight: "bold" }}>
-              {data.representante}
-            </div>
-
-            <div className="p-md-2">Vto. Seguro: </div>
-            <div className="p-md-10" style={{ fontWeight: "bold" }}>
-              {data.seguro_propio
-                ? [
-                    <Moment locale="es" format="DD-MM-YYYY">
-                      {data.seguro_propio_vencimiento}
-                    </Moment>,
-                    vencido ? " (VENCIDO)" : null
-                  ]
-                : null}
             </div>
           </div>
         </div>
@@ -191,9 +148,12 @@ function Clientes(props) {
   };
 
   useEffect(() => {
-    getClientes();
-    setLoadingData(false);
-  }, []);
+    setLoadingData(true);
+    if (agencia) {
+      getCobradores(agencia.id);
+      setLoadingData(false);
+    }
+  }, [agencia]);
 
   //Ejecuto el fitro estado para seleccionar los activos por defecto
   useEffect(() => {
@@ -202,16 +162,16 @@ function Clientes(props) {
 
   return (
     <Fragment>
-      <ClientesForm editar={editar} />
+      <CobradoresForm editar={editar} />
       <div className="p-grid">
         <div className="p-col-12">
           <div className="card">
-            <h1>Clientes</h1>
+            <h1>Cobradores</h1>
 
             <SidebarInactivar
               texto={`¿Está seguro de ${
                 selectedItem.estado ? "Inactivar" : "Activar"
-              } este Cliente?`}
+              } este Cobrador?`}
               visible={sidebarState.visible}
               setEstado={setEstado}
               toggleSidebar={toggleSidebar}
@@ -242,7 +202,7 @@ function Clientes(props) {
               <DataTable
                 ref={el => (dt = el)}
                 style={{ margin: "20px 0px 0px 0px" }}
-                value={clientes}
+                value={cobradores}
                 globalFilter={globalFilter}
                 emptyMessage="No se encontraron registros"
                 paginator={true}
@@ -252,32 +212,18 @@ function Clientes(props) {
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 expandedRows={expandedRows}
                 onRowToggle={e => setExpandedRows(e.data)}
-                // onRowExpand={e => {
-                //   if (!e.data.leida) setLeida(e.data);
-                // }}
                 rowExpansionTemplate={rowExpansionTemplate}
                 dataKey="id"
                 responsive
               >
                 <Column expander={true} style={{ width: "3em" }} />
                 <Column
-                  field="nro_documento"
-                  header="Documento"
+                  field="id"
+                  header="Id"
                   sortable={true}
-                  style={{ width: "150px", textAlign: "center" }}
-                  filter={true}
-                  filterPlaceholder="Filtrar"
-                  filterMatchMode="contains"
+                  style={{ width: "100px", textAlign: "center" }}
                 />
-                <Column
-                  field="nombre"
-                  header="Nombre/Razón Social"
-                  sortable={true}
-                  filter={true}
-                  filterPlaceholder="Filtrar"
-                  filterMatchMode="contains"
-                />
-                <Column field="telefono" header="Teléfono" />
+                <Column field="nombre" header="Nombre" sortable={true} />
                 <Column
                   field="estado"
                   header="Estado"
@@ -301,4 +247,4 @@ function Clientes(props) {
   );
 }
 
-export default Clientes;
+export default Cobradores;
