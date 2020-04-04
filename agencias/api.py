@@ -35,6 +35,11 @@ class Cobrador_Agencia(generics.ListAPIView):
         return Cobrador.objects.filter(agencia=agen)
 
 
+class TarifaViewSet(GetPermisionViewSet):
+    serializer_class = TarifaSerializer
+    queryset = Tarifa.objects.all().order_by('nombre')
+
+
 class Tarifa_Agencia(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = TarifaSerializer
@@ -42,6 +47,11 @@ class Tarifa_Agencia(generics.ListAPIView):
     def get_queryset(self):
         agen = self.kwargs['agencia']
         return Tarifa.objects.filter(agencia=agen)
+
+
+class ZonaViewSet(GetPermisionViewSet):
+    serializer_class = ZonaSerializer
+    queryset = Zona.objects.all().order_by('nombre')
 
 
 class Zona_Agencia(generics.ListAPIView):

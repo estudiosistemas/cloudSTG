@@ -1,36 +1,34 @@
 import React, { useContext, Fragment, useEffect } from "react";
 import globalContext from "../../../context/global/globalContext";
+import tarifaContext from "../../../context/agencias/tarifas/tarifaContext";
 
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
-import { InputMask } from "primereact/inputmask";
-import { Checkbox } from "primereact/checkbox";
 
 import { isEmpty } from "../../common/CoustomFunctions";
-import cobradorContext from "../../../context/agencias/cobradores/cobradorContext";
 
-const CobradoresForm = ({ editar }) => {
+const TarifasForm = ({ editar }) => {
   //context state
-  const cobradorCtx = useContext(cobradorContext);
+  const tarifaCtx = useContext(tarifaContext);
   const {
-    cobrador,
+    tarifa,
     showForm,
     mostrarFormulario,
-    addCobrador,
-    updateCobrador,
-    setCobrador
-  } = cobradorCtx;
+    addTarifa,
+    updateTarifa,
+    setTarifa,
+  } = tarifaCtx;
 
-  const { nombre, domicilio, telefono, comision } = cobrador;
+  const { nombre } = tarifa;
 
   //global state
   const GlobalCtx = useContext(globalContext);
   const { showMessage } = GlobalCtx;
 
-  const onChange = e => {
-    setCobrador({
-      ...cobrador,
-      [e.target.name]: e.target.value.toUpperCase()
+  const onChange = (e) => {
+    setTarifa({
+      ...tarifa,
+      [e.target.name]: e.target.value.toUpperCase(),
     });
   };
 
@@ -40,18 +38,14 @@ const CobradoresForm = ({ editar }) => {
       showMessage({
         msg: "Los campos con * son obligatorios",
         title: "Error",
-        type: "error"
+        type: "error",
       });
     } else {
       //Agrego
-      const miCobrador = {
-        ...cobrador
-      };
-
       if (!editar) {
-        addCobrador(miCobrador);
+        addTarifa(tarifa);
       } else {
-        updateCobrador(miCobrador);
+        updateTarifa(tarifa);
       }
     }
   };
@@ -63,7 +57,7 @@ const CobradoresForm = ({ editar }) => {
           <div className="card">
             <div className="p-grid p-fluid">
               <div className="p-col-12">
-                {editar ? <h1>Editar Cobrador</h1> : <h1>Agregar Cobrador</h1>}
+                {editar ? <h1>Editar Tarifa</h1> : <h1>Agregar Tarifa</h1>}
               </div>
               <div className="p-col-12 p-md-6">
                 <label style={{ marginTop: "1em" }}>Nombre*</label>
@@ -74,47 +68,6 @@ const CobradoresForm = ({ editar }) => {
                   onChange={onChange}
                   maxLength="100"
                   autoFocus
-                />
-              </div>
-
-              <div className="p-col-6"></div>
-
-              <div className="p-col-12 p-md-6">
-                <label style={{ marginTop: "1em" }}>Domicilio</label>
-
-                <InputText
-                  id="domicilio"
-                  name="domicilio"
-                  onChange={onChange}
-                  value={domicilio}
-                  maxLength="100"
-                />
-              </div>
-
-              <div className="p-col-6"></div>
-
-              <div className="p-col-12 p-md-6">
-                <label style={{ marginTop: "1em" }}>Teléfono</label>
-
-                <InputText
-                  id="telefono"
-                  name="telefono"
-                  onChange={onChange}
-                  value={telefono}
-                  maxLength="100"
-                />
-              </div>
-              <div className="p-col-6"></div>
-              <div className="p-col-12 p-md-6">
-                <label style={{ marginTop: "1em" }}>Comisión</label>
-
-                <InputText
-                  id="comision"
-                  name="comision"
-                  keyfilter="pnum"
-                  onChange={onChange}
-                  value={comision}
-                  maxLength="5"
                 />
               </div>
 
@@ -145,4 +98,4 @@ const CobradoresForm = ({ editar }) => {
   );
 };
 
-export default CobradoresForm;
+export default TarifasForm;

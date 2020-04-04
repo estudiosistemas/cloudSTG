@@ -22,25 +22,24 @@ const GlobalState = props => {
     });
   };
 
-  // const showGrowl = message => {
-  //   dispatch({
-  //     type: SHOW_GROWL,
-  //     payload: message
-  //   });
-  // };
-
-  // const setError = error => {
-  //   dispatch({
-  //     type: SET_ERROR,
-  //     payload: error
-  //   });
-  // };
+  const mostrarError = error => {
+    //Errores en Cobradores
+    console.log(error.response);
+    if (error.response.data.comision) {
+      showMessage({
+        msg: error.response.data.comision[0],
+        title: "Error",
+        type: "error"
+      });
+    }
+  };
 
   return (
     <globalContext.Provider
       value={{
         message: state.message,
-        showMessage
+        showMessage,
+        mostrarError
       }}
     >
       {props.children}

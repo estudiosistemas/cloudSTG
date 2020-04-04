@@ -27,10 +27,10 @@ class CobradorSerializer(serializers.ModelSerializer):
 class TarifaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tarifa
-        fields = ['id', 'nombre']
+        fields = '__all__'
 
 
 class ZonaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Zona
-        fields = ['id', 'nombre']
+        fields = '__all__'

@@ -1,6 +1,6 @@
 import React, { useEffect, Fragment, useState, useContext } from "react";
 
-import cobradorContext from "../../../context/agencias/cobradores/cobradorContext";
+import tarifaContext from "../../../context/agencias/tarifas/tarifaContext";
 import authContext from "../../../context/auth/authContext";
 
 //Prime-React
@@ -10,12 +10,12 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import classNames from "classnames";
-import CobradoresForm from "./CobradoresForm";
+import TarifasForm from "./TarifasForm";
 
 import SidebarInactivar from "../../common/SidebarInactivar";
 import TablasActionTemplate from "../../common/TablasActionTemplate";
 
-function Cobradores(props) {
+function Tarifas(props) {
   const [sidebarState, setSideBarState] = useState({ visible: false });
   const [editar, setEditar] = useState(false);
 
@@ -23,47 +23,46 @@ function Cobradores(props) {
   const [globalFilter, setglobalFilter] = useState("");
   const [selectedItem, setSelectedItem] = useState({});
   const [filtroEstado, setFiltroEstado] = useState("true");
-  const [expandedRows, setExpandedRows] = useState({});
   const [loadingData, setLoadingData] = useState(true);
 
   //local state
-  const cobradorCtx = useContext(cobradorContext);
+  const tarifaCtx = useContext(tarifaContext);
   const {
-    cobradores,
+    tarifas,
     mostrarFormulario,
-    getCobradores,
-    setCobrador,
-    toggleEstadoCobrador
-  } = cobradorCtx;
+    getTarifas,
+    setTarifa,
+    toggleEstadoTarifa,
+  } = tarifaCtx;
 
   //auth state
   const authCtx = useContext(authContext);
   const { agencia } = authCtx;
 
-  const setEstado = data => {
-    setCobrador(data);
+  const setEstado = (data) => {
+    setTarifa(data);
     data.estado = !data.estado;
-    toggleEstadoCobrador(data);
+    toggleEstadoTarifa(data);
   };
 
   const handleAgregar = () => {
     setEditar(false);
-    setCobrador({});
+    setTarifa({});
     mostrarFormulario();
   };
 
-  const handleEditar = dato => {
-    setCobrador(dato);
+  const handleEditar = (dato) => {
+    setTarifa(dato);
     setEditar(true);
     mostrarFormulario();
   };
 
-  const handleInhabilitar = item => {
+  const handleInhabilitar = (item) => {
     setSelectedItem(item);
     toggleSidebar();
   };
 
-  const estadoTemplate = rowData => {
+  const estadoTemplate = (rowData) => {
     return (
       <span
         className={classNames("customer-badge", "status-" + rowData.estado)}
@@ -90,7 +89,7 @@ function Cobradores(props) {
 
   let dt = React.createRef();
 
-  const onEstadoChange = event => {
+  const onEstadoChange = (event) => {
     dt.filter(event.value, "estado", "equals");
     setFiltroEstado(event.value);
   };
@@ -98,7 +97,7 @@ function Cobradores(props) {
   const estados = [
     { label: "ACTIVOS", value: "true" },
     { label: "INACTIVOS", value: "false" },
-    { label: "TODOS", value: null }
+    { label: "TODOS", value: null },
   ];
 
   const estadoFilter = (
@@ -111,46 +110,10 @@ function Cobradores(props) {
     />
   );
 
-  const rowExpansionTemplate = data => {
-    return (
-      <div className="p-grid p-fluid" style={{ padding: "2em 1em 1em 1em" }}>
-        <div className="p-col-12 p-md-6">
-          <div className="p-grid">
-            <div className="p-md-2">Id: </div>
-            <div className="p-md-10" style={{ fontWeight: "bold" }}>
-              {data.id}
-            </div>
-            <div className="p-md-2">Nombre: </div>
-            <div className="p-md-10" style={{ fontWeight: "bold" }}>
-              {data.nombre}
-            </div>
-            <div className="p-md-2">Comisión: </div>
-            <div className="p-md-10" style={{ fontWeight: "bold" }}>
-              {data.comision} %
-            </div>
-          </div>
-        </div>
-        <div className="p-col-12 p-md-6">
-          <div className="p-grid">
-            <div className="p-md-2">Domicilio: </div>
-            <div className="p-md-10" style={{ fontWeight: "bold" }}>
-              {data.domicilio}
-            </div>
-
-            <div className="p-md-2">Teléfono: </div>
-            <div className="p-md-10" style={{ fontWeight: "bold" }}>
-              {data.telefono}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   useEffect(() => {
     setLoadingData(true);
     if (agencia) {
-      getCobradores(agencia.id);
+      getTarifas(agencia.id);
       setLoadingData(false);
     }
   }, [agencia]);
@@ -162,16 +125,16 @@ function Cobradores(props) {
 
   return (
     <Fragment>
-      <CobradoresForm editar={editar} />
+      <TarifasForm editar={editar} />
       <div className="p-grid">
         <div className="p-col-12">
           <div className="card">
-            <h1>Cobradores</h1>
+            <h1>Tarifas</h1>
 
             <SidebarInactivar
               texto={`¿Está seguro de ${
                 selectedItem.estado ? "Inactivar" : "Activar"
-              } este Cobrador?`}
+              } esta Tarifa?`}
               visible={sidebarState.visible}
               setEstado={setEstado}
               toggleSidebar={toggleSidebar}
@@ -185,7 +148,7 @@ function Cobradores(props) {
               ></i>
               <InputText
                 type="search"
-                onInput={e => setglobalFilter(e.target.value)}
+                onInput={(e) => setglobalFilter(e.target.value)}
                 placeholder="Buscar"
                 size="50"
               />
@@ -200,9 +163,9 @@ function Cobradores(props) {
             </div>
             <div className="datatable-doc-demo">
               <DataTable
-                ref={el => (dt = el)}
+                ref={(el) => (dt = el)}
                 style={{ margin: "20px 0px 0px 0px" }}
-                value={cobradores}
+                value={tarifas}
                 globalFilter={globalFilter}
                 emptyMessage="No se encontraron registros"
                 paginator={true}
@@ -210,26 +173,16 @@ function Cobradores(props) {
                 rowsPerPageOptions={[5, 10, 25, 50]}
                 className="p-datatable-customers"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                expandedRows={expandedRows}
-                onRowToggle={e => setExpandedRows(e.data)}
-                rowExpansionTemplate={rowExpansionTemplate}
                 dataKey="id"
                 responsive
               >
-                <Column expander={true} style={{ width: "3em" }} />
                 <Column
                   field="id"
                   header="Id"
                   sortable={true}
                   style={{ width: "100px", textAlign: "center" }}
                 />
-                <Column field="nombre" header="Nombre" sortable={true} />
-                <Column
-                  field="comision"
-                  header="Comision"
-                  sortable={false}
-                  style={{ width: "150px", textAlign: "center" }}
-                />
+                <Column field="nombre" header="Zona" sortable={true} />
                 <Column
                   field="estado"
                   header="Estado"
@@ -253,4 +206,4 @@ function Cobradores(props) {
   );
 }
 
-export default Cobradores;
+export default Tarifas;

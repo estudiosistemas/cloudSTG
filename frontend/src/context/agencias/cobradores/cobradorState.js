@@ -35,7 +35,7 @@ const CobradorState = props => {
 
   //global state
   const GlobalCtx = useContext(globalContext);
-  const { showMessage } = GlobalCtx;
+  const { showMessage, mostrarError } = GlobalCtx;
 
   //Funciones para el CRUD
   const mostrarFormulario = () => {
@@ -88,10 +88,11 @@ const CobradorState = props => {
   //ADD
   const addCobrador = cobrador => {
     const miCobrador = {
-      ...cobrador
+      ...cobrador,
+      agencia: agencia.id
     };
     axios
-      .post(`/api/cobradores`, miCobrador, tokenConfig())
+      .post(`/api/cobradores/`, miCobrador, tokenConfig())
       .then(res => {
         showMessage({
           msg: "Cobrador agregado correctamente",
@@ -103,30 +104,17 @@ const CobradorState = props => {
           payload: res.data
         });
       })
-      .catch(
-        err => {
-          showMessage({
-            msg: err.response.data.comision[0],
-            title: "Cobradores",
-            type: "error"
-          });
-        }
-        //dispatch(returnErrors(err.response.data, err.response.status))
-      );
+      .catch(err => mostrarError(err));
   };
 
   //UPDATE
   const updateCobrador = cobrador => {
-    const miCobrador = {
-      ...cobrador
-    };
-
     axios
-      .put(`/api/cobradores/${cobrador.id}/`, miCobrador, tokenConfig())
+      .put(`/api/cobradores/${cobrador.id}/`, cobrador, tokenConfig())
       .then(res => {
         showMessage({
           msg: "Actualizado correctamente",
-          title: "Cobradores",
+          title: "Cobrador",
           type: "success"
         });
         dispatch({
@@ -134,13 +122,7 @@ const CobradorState = props => {
           payload: cobrador
         });
       })
-      .catch(err =>
-        showMessage({
-          msg: err.response.data.comision[0],
-          title: "Cobradores",
-          type: "error"
-        })
-      );
+      .catch(err => mostrarError(err));
   };
 
   //Cambio a inactivo

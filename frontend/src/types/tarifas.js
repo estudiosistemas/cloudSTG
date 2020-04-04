@@ -1,0 +1,9 @@
+export const SHOW_FORM_TARIFA = "SHOW_FORM_TARIFA";
+
+export const GET_TARIFAS = "GET_TARIFAS";
+export const ADD_TARIFA = "ADD_TARIFA";
+export const UPDATE_TARIFA = "UPDATE_TARIFA";
+
+export const SET_TARIFA = "SET_TARIFA";
+
+export const TOGGLE_ESTADO_TARIFA = "TOGGLE_ESTADO_TARIFA";

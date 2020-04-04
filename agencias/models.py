@@ -60,7 +60,8 @@ class Cobrador(MyModel):
         return '{}'.format(self.nombre)
 
     def save(self, *args, **kwargs):
-        self.nombre = self.nombre.upper()
+        if self.nombre:
+            self.nombre = self.nombre.upper()
         if self.domicilio:
             self.domicilio = self.domicilio.upper()
         super(Cobrador, self).save(*args, **kwargs)
@@ -77,7 +78,8 @@ class Tarifa(MyModel):
         return '{}'.format(self.nombre)
 
     def save(self, *args, **kwargs):
-        self.nombre = self.nombre.upper()
+        if self.nombre:
+            self.nombre = self.nombre.upper()
         super(Tarifa, self).save(*args, **kwargs)
 
     class Meta:
@@ -92,7 +94,8 @@ class Zona(MyModel):
         return '{}'.format(self.nombre)
 
     def save(self, *args, **kwargs):
-        self.nombre = self.nombre.upper()
+        if self.nombre:
+            self.nombre = self.nombre.upper()
         super(Zona, self).save(*args, **kwargs)
 
     class Meta:

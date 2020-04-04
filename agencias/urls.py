@@ -1,9 +1,11 @@
 from django.urls import path, include
 from rest_framework import routers
-from .api import Agencias_User, Cobrador_Agencia, Tarifa_Agencia, Zona_Agencia, CobradorViewSet
+from .api import Agencias_User, Cobrador_Agencia, Tarifa_Agencia, Zona_Agencia, CobradorViewSet, ZonaViewSet, TarifaViewSet
 
 router = routers.DefaultRouter()
 router.register('api/cobradores', CobradorViewSet, 'cobradores')
+router.register('api/zonas', ZonaViewSet, 'zonas')
+router.register('api/tarifas', TarifaViewSet, 'tarifas')
 
 urlpatterns = [
     path('api/auth/agenciasusuario/<str:codigo>',

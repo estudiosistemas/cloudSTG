@@ -1,6 +1,6 @@
 import React, { useEffect, Fragment, useState, useContext } from "react";
 
-import cobradorContext from "../../../context/agencias/cobradores/cobradorContext";
+import zonaContext from "../../../context/agencias/zonas/zonaContext";
 import authContext from "../../../context/auth/authContext";
 
 //Prime-React
@@ -10,12 +10,12 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import classNames from "classnames";
-import CobradoresForm from "./CobradoresForm";
+import ZonasForm from "./ZonasForm";
 
 import SidebarInactivar from "../../common/SidebarInactivar";
 import TablasActionTemplate from "../../common/TablasActionTemplate";
 
-function Cobradores(props) {
+function Zonas(props) {
   const [sidebarState, setSideBarState] = useState({ visible: false });
   const [editar, setEditar] = useState(false);
 
@@ -27,33 +27,33 @@ function Cobradores(props) {
   const [loadingData, setLoadingData] = useState(true);
 
   //local state
-  const cobradorCtx = useContext(cobradorContext);
+  const zonaCtx = useContext(zonaContext);
   const {
-    cobradores,
+    zonas,
     mostrarFormulario,
-    getCobradores,
-    setCobrador,
-    toggleEstadoCobrador
-  } = cobradorCtx;
+    getZonas,
+    setZona,
+    toggleEstadoZona
+  } = zonaCtx;
 
   //auth state
   const authCtx = useContext(authContext);
   const { agencia } = authCtx;
 
   const setEstado = data => {
-    setCobrador(data);
+    setZona(data);
     data.estado = !data.estado;
-    toggleEstadoCobrador(data);
+    toggleEstadoZona(data);
   };
 
   const handleAgregar = () => {
     setEditar(false);
-    setCobrador({});
+    setZona({});
     mostrarFormulario();
   };
 
   const handleEditar = dato => {
-    setCobrador(dato);
+    setZona(dato);
     setEditar(true);
     mostrarFormulario();
   };
@@ -111,46 +111,10 @@ function Cobradores(props) {
     />
   );
 
-  const rowExpansionTemplate = data => {
-    return (
-      <div className="p-grid p-fluid" style={{ padding: "2em 1em 1em 1em" }}>
-        <div className="p-col-12 p-md-6">
-          <div className="p-grid">
-            <div className="p-md-2">Id: </div>
-            <div className="p-md-10" style={{ fontWeight: "bold" }}>
-              {data.id}
-            </div>
-            <div className="p-md-2">Nombre: </div>
-            <div className="p-md-10" style={{ fontWeight: "bold" }}>
-              {data.nombre}
-            </div>
-            <div className="p-md-2">Comisión: </div>
-            <div className="p-md-10" style={{ fontWeight: "bold" }}>
-              {data.comision} %
-            </div>
-          </div>
-        </div>
-        <div className="p-col-12 p-md-6">
-          <div className="p-grid">
-            <div className="p-md-2">Domicilio: </div>
-            <div className="p-md-10" style={{ fontWeight: "bold" }}>
-              {data.domicilio}
-            </div>
-
-            <div className="p-md-2">Teléfono: </div>
-            <div className="p-md-10" style={{ fontWeight: "bold" }}>
-              {data.telefono}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   useEffect(() => {
     setLoadingData(true);
     if (agencia) {
-      getCobradores(agencia.id);
+      getZonas(agencia.id);
       setLoadingData(false);
     }
   }, [agencia]);
@@ -162,16 +126,16 @@ function Cobradores(props) {
 
   return (
     <Fragment>
-      <CobradoresForm editar={editar} />
+      <ZonasForm editar={editar} />
       <div className="p-grid">
         <div className="p-col-12">
           <div className="card">
-            <h1>Cobradores</h1>
+            <h1>Zonas</h1>
 
             <SidebarInactivar
               texto={`¿Está seguro de ${
                 selectedItem.estado ? "Inactivar" : "Activar"
-              } este Cobrador?`}
+              } esta Zona?`}
               visible={sidebarState.visible}
               setEstado={setEstado}
               toggleSidebar={toggleSidebar}
@@ -202,7 +166,7 @@ function Cobradores(props) {
               <DataTable
                 ref={el => (dt = el)}
                 style={{ margin: "20px 0px 0px 0px" }}
-                value={cobradores}
+                value={zonas}
                 globalFilter={globalFilter}
                 emptyMessage="No se encontraron registros"
                 paginator={true}
@@ -210,26 +174,16 @@ function Cobradores(props) {
                 rowsPerPageOptions={[5, 10, 25, 50]}
                 className="p-datatable-customers"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                expandedRows={expandedRows}
-                onRowToggle={e => setExpandedRows(e.data)}
-                rowExpansionTemplate={rowExpansionTemplate}
                 dataKey="id"
                 responsive
               >
-                <Column expander={true} style={{ width: "3em" }} />
                 <Column
                   field="id"
                   header="Id"
                   sortable={true}
                   style={{ width: "100px", textAlign: "center" }}
                 />
-                <Column field="nombre" header="Nombre" sortable={true} />
-                <Column
-                  field="comision"
-                  header="Comision"
-                  sortable={false}
-                  style={{ width: "150px", textAlign: "center" }}
-                />
+                <Column field="nombre" header="Zona" sortable={true} />
                 <Column
                   field="estado"
                   header="Estado"
@@ -253,4 +207,4 @@ function Cobradores(props) {
   );
 }
 
-export default Cobradores;
+export default Zonas;

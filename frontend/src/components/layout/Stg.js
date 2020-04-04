@@ -3,7 +3,7 @@ import {
   HashRouter as Router,
   Route,
   Switch,
-  useHistory
+  useHistory,
 } from "react-router-dom";
 import classNames from "classnames";
 
@@ -35,8 +35,12 @@ import Notificaciones from "../notificaciones/Notificaciones";
 import Dashboard from "./Dashboard";
 import CobradorState from "../../context/agencias/cobradores/cobradorState";
 import Cobradores from "../agencias/cobradores/Cobradores";
+import ZonaState from "../../context/agencias/zonas/zonaState";
+import Zonas from "../agencias/zonas/Zonas";
+import TarifaState from "../../context/agencias/tarifas/tarifaState";
+import Tarifas from "../agencias/tarifas/Tarifas";
 
-const Stg = props => {
+const Stg = (props) => {
   const [layoutMode, setlayoutMode] = useState("static");
   const [layoutColorMode, setlayoutColorMode] = useState("dark");
   const [staticMenuInactive, setstaticMenuInactive] = useState(false);
@@ -55,7 +59,7 @@ const Stg = props => {
 
   let history = useHistory();
 
-  const onWrapperClick = event => {
+  const onWrapperClick = (event) => {
     if (!menuClick) {
       setoverlayMenuActive(false);
       setmobileMenuActive(false);
@@ -64,7 +68,7 @@ const Stg = props => {
     setmenuClick(false);
   };
 
-  const onToggleMenu = event => {
+  const onToggleMenu = (event) => {
     setmenuClick(true);
 
     if (isDesktop()) {
@@ -80,11 +84,11 @@ const Stg = props => {
     event.preventDefault();
   };
 
-  const onSidebarClick = event => {
+  const onSidebarClick = (event) => {
     setmenuClick(true);
   };
 
-  const onMenuItemClick = event => {
+  const onMenuItemClick = (event) => {
     if (!event.item.items) {
       setoverlayMenuActive(false);
       setmobileMenuActive(false);
@@ -97,7 +101,7 @@ const Stg = props => {
       icon: "pi pi-fw pi-home",
       command: () => {
         history.push("/stg/dashboard");
-      }
+      },
     },
     {
       label: "Clientes",
@@ -106,19 +110,19 @@ const Stg = props => {
         {
           label: "Administrar Clientes",
           icon: "pi pi-fw pi-user-plus",
-          command: () => history.push("/stg/clientes")
+          command: () => history.push("/stg/clientes"),
         },
         {
           label: "Resúmen de Cuenta",
           icon: "pi pi-fw pi-user-plus",
-          command: () => history.push("/stg")
+          command: () => history.push("/stg"),
         },
         {
           label: "Listado de Saldos",
           icon: "pi pi-fw pi-user-plus",
-          command: () => history.push("/stg")
-        }
-      ]
+          command: () => history.push("/stg"),
+        },
+      ],
     },
     {
       label: "Agencia",
@@ -129,30 +133,30 @@ const Stg = props => {
           icon: "pi pi-fw pi-bars",
           command: () => {
             history.push("/stg");
-          }
+          },
         },
         {
           label: "Cobradores",
           icon: "pi pi-fw pi-bars",
           command: () => {
             history.push("/stg/cobradores");
-          }
+          },
         },
         {
           label: "Zonas",
           icon: "pi pi-fw pi-bars",
           command: () => {
             history.push("/stg/zonas");
-          }
+          },
         },
         {
           label: "Tarifas",
           icon: "pi pi-fw pi-bars",
           command: () => {
             history.push("/stg/tarifas");
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     {
       label: "Tablas del Sistema",
@@ -163,30 +167,30 @@ const Stg = props => {
           icon: "pi pi-fw pi-bars",
           command: () => {
             history.push("/stg/provincias");
-          }
+          },
         },
         {
           label: "Códigos Postales",
           icon: "pi pi-fw pi-bars",
           command: () => {
             history.push("/stg/codigospostales");
-          }
+          },
         },
         {
           label: "Alicuotas IVA",
           icon: "pi pi-fw pi-bars",
           command: () => {
             history.push("/stg/alicuotasiva");
-          }
+          },
         },
         {
           label: "Condiciones de IVA",
           icon: "pi pi-fw pi-bars",
           command: () => {
             history.push("/stg/condicioniva");
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     {
       label: "Components",
@@ -201,15 +205,15 @@ const Stg = props => {
         { label: "Menus", icon: "pi pi-fw pi-plus", to: "/menus" },
         { label: "Messages", icon: "pi pi-fw pi-spinner", to: "/messages" },
         { label: "Charts", icon: "pi pi-fw pi-chart-bar", to: "/charts" },
-        { label: "Misc", icon: "pi pi-fw pi-upload", to: "/misc" }
-      ]
+        { label: "Misc", icon: "pi pi-fw pi-upload", to: "/misc" },
+      ],
     },
     {
       label: "Template Pages",
       icon: "pi pi-fw pi-file",
       items: [
-        { label: "Empty Page", icon: "pi pi-fw pi-circle-off", to: "/empty" }
-      ]
+        { label: "Empty Page", icon: "pi pi-fw pi-circle-off", to: "/empty" },
+      ],
     },
     {
       label: "Menu Hierarchy",
@@ -225,18 +229,18 @@ const Stg = props => {
               items: [
                 { label: "Submenu 1.1.1", icon: "pi pi-fw pi-bookmark" },
                 { label: "Submenu 1.1.2", icon: "pi pi-fw pi-bookmark" },
-                { label: "Submenu 1.1.3", icon: "pi pi-fw pi-bookmark" }
-              ]
+                { label: "Submenu 1.1.3", icon: "pi pi-fw pi-bookmark" },
+              ],
             },
             {
               label: "Submenu 1.2",
               icon: "pi pi-fw pi-bookmark",
               items: [
                 { label: "Submenu 1.2.1", icon: "pi pi-fw pi-bookmark" },
-                { label: "Submenu 1.2.2", icon: "pi pi-fw pi-bookmark" }
-              ]
-            }
-          ]
+                { label: "Submenu 1.2.2", icon: "pi pi-fw pi-bookmark" },
+              ],
+            },
+          ],
         },
         {
           label: "Submenu 2",
@@ -248,21 +252,21 @@ const Stg = props => {
               items: [
                 { label: "Submenu 2.1.1", icon: "pi pi-fw pi-bookmark" },
                 { label: "Submenu 2.1.2", icon: "pi pi-fw pi-bookmark" },
-                { label: "Submenu 2.1.3", icon: "pi pi-fw pi-bookmark" }
-              ]
+                { label: "Submenu 2.1.3", icon: "pi pi-fw pi-bookmark" },
+              ],
             },
             {
               label: "Submenu 2.2",
               icon: "pi pi-fw pi-bookmark",
               items: [
                 { label: "Submenu 2.2.1", icon: "pi pi-fw pi-bookmark" },
-                { label: "Submenu 2.2.2", icon: "pi pi-fw pi-bookmark" }
-              ]
-            }
-          ]
-        }
-      ]
-    }
+                { label: "Submenu 2.2.2", icon: "pi pi-fw pi-bookmark" },
+              ],
+            },
+          ],
+        },
+      ],
+    },
   ];
 
   const addClass = (element, className) => {
@@ -296,7 +300,7 @@ const Stg = props => {
 
   useEffect(() => {
     function cargarNotifys() {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         if (isAuthenticated) {
           resolve(getNotificaciones_Recibidas());
         }
@@ -325,12 +329,12 @@ const Stg = props => {
       staticMenuInactive && layoutMode === "static",
     "layout-overlay-sidebar-active":
       overlayMenuActive && layoutMode === "overlay",
-    "layout-mobile-sidebar-active": mobileMenuActive
+    "layout-mobile-sidebar-active": mobileMenuActive,
   });
 
   const sidebarClassName = classNames("layout-sidebar", {
     "layout-sidebar-dark": layoutColorMode === "dark",
-    "layout-sidebar-light": layoutColorMode === "light"
+    "layout-sidebar-light": layoutColorMode === "light",
   });
 
   if (!isAuthenticated) {
@@ -360,26 +364,26 @@ const Stg = props => {
         <div className="layout-main">
           <Route
             path="/stg/dashboard"
-            render={props => {
+            render={(props) => {
               return <Dashboard {...props} />;
             }}
           />
           <Route
             path="/stg/profile"
-            render={props => {
+            render={(props) => {
               return <Profile {...props} />;
             }}
           />
           <Route
             path="/stg/notificaciones"
-            render={props => {
+            render={(props) => {
               return <Notificaciones {...props} />;
             }}
           />
           <ClienteState>
             <Route
               path="/stg/clientes"
-              render={props => {
+              render={(props) => {
                 return <Clientes {...props} />;
               }}
             />
@@ -387,7 +391,7 @@ const Stg = props => {
           <ProvinciaState>
             <Route
               path="/stg/provincias"
-              render={props => {
+              render={(props) => {
                 return <Provincias {...props} />;
               }}
             />
@@ -395,7 +399,7 @@ const Stg = props => {
           <CodigoPostalState>
             <Route
               path="/stg/codigospostales"
-              render={props => {
+              render={(props) => {
                 return <CodigosPostales {...props} />;
               }}
             />
@@ -403,7 +407,7 @@ const Stg = props => {
           <AlicuotaState>
             <Route
               path="/stg/alicuotasiva"
-              render={props => {
+              render={(props) => {
                 return <Alicuotas {...props} />;
               }}
             />
@@ -411,7 +415,7 @@ const Stg = props => {
           <CondicionIVAState>
             <Route
               path="/stg/condicioniva"
-              render={props => {
+              render={(props) => {
                 return <CondicionIVA {...props} />;
               }}
             />
@@ -419,14 +423,33 @@ const Stg = props => {
           <CobradorState>
             <Route
               path="/stg/cobradores"
-              render={props => {
+              render={(props) => {
                 return <Cobradores {...props} />;
               }}
             />
           </CobradorState>
+
+          <ZonaState>
+            <Route
+              path="/stg/zonas"
+              render={(props) => {
+                return <Zonas {...props} />;
+              }}
+            />
+          </ZonaState>
+
+          <TarifaState>
+            <Route
+              path="/stg/tarifas"
+              render={(props) => {
+                return <Tarifas {...props} />;
+              }}
+            />
+          </TarifaState>
+
           <Route
             path="/stg/agencias"
-            render={props => {
+            render={(props) => {
               return <Agencias {...props} />;
             }}
           />
