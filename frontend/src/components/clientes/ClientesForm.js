@@ -1,4 +1,4 @@
-import React, { useContext, Fragment, useEffect } from "react";
+import React, { useContext, Fragment, useEffect, useState } from "react";
 import clienteContext from "../../context/clientes/clienteContext";
 import globalContext from "../../context/global/globalContext";
 
@@ -15,6 +15,9 @@ import { isEmpty, dateCalendarToSave } from "../common/CoustomFunctions";
 import useTipo_Documento from "../../hooks/useTipo_Documento";
 import useCondicionIva from "../../hooks/useCondicionIva";
 import useCodigoPostal from "../../hooks/useCodigoPostal";
+import useCobrador from "../../hooks/useCobrador";
+import useZona from "../../hooks/useZona";
+import useTarifa from "../../hooks/useTarifa";
 
 const ClientesForm = ({ editar }) => {
   //context state
@@ -25,7 +28,9 @@ const ClientesForm = ({ editar }) => {
     mostrarFormulario,
     addCliente,
     updateCliente,
-    setCliente
+    setCliente,
+    cliente_agencia,
+    setClienteAgencia,
   } = clientesCtx;
 
   const {
@@ -39,8 +44,19 @@ const ClientesForm = ({ editar }) => {
     email,
     representante,
     seguro_propio,
-    seguro_propio_vencimiento
+    seguro_propio_vencimiento,
   } = cliente;
+
+  const {
+    cobrador,
+    zona,
+    tarifa,
+    tarifa_bulto,
+    tarifa_kg,
+    tarifa_m3,
+    tarifa_porcentaje,
+    cta_cte,
+  } = cliente_agencia;
 
   //global state
   const GlobalCtx = useContext(globalContext);
@@ -50,25 +66,35 @@ const ClientesForm = ({ editar }) => {
   const [
     stateTipo_Documento,
     SelectTipo_Documento,
-    actualizarStateTipo_Documento
+    actualizarStateTipo_Documento,
   ] = useTipo_Documento({});
 
   const [
     stateCondicionIva,
     SelectCondicionIva,
-    actualizarStateCondicionIva
+    actualizarStateCondicionIva,
   ] = useCondicionIva({});
 
   const [
     stateCodigoPostal,
     SelectCodigoPostal,
-    actualizarStateCodigoPostal
+    actualizarStateCodigoPostal,
   ] = useCodigoPostal({});
 
-  const onChange = e => {
+  const [stateCobrador, SelectCobrador, actualizarStateCobrador] = useCobrador(
+    {}
+  );
+
+  const [stateZona, SelectZona, actualizarStateZona] = useZona({});
+
+  const [stateTarifa, SelectTarifa, actualizarStateTarifa] = useTarifa({});
+
+  const [agregoClienteAgencia, setAgregoClienteAgencia] = useState(true);
+
+  const onChange = (e) => {
     setCliente({
       ...cliente,
-      [e.target.name]: e.target.value.toUpperCase()
+      [e.target.name]: e.target.value.toUpperCase(),
     });
   };
 
@@ -78,12 +104,15 @@ const ClientesForm = ({ editar }) => {
       isEmpty(nombre) |
       (stateTipo_Documento == undefined) |
       (stateCondicionIva == undefined) |
-      (stateCodigoPostal == undefined)
+      (stateCodigoPostal == undefined) |
+      (stateCobrador == undefined) |
+      (stateZona == undefined) |
+      (stateTarifa == undefined)
     ) {
       showMessage({
         msg: "Los campos con * son obligatorios.",
         title: "Error",
-        type: "error"
+        type: "error",
       });
     } else {
       //Agrego
@@ -95,18 +124,20 @@ const ClientesForm = ({ editar }) => {
         tipo_documento: stateTipo_Documento,
         iva: stateCondicionIva,
         codigo_postal: stateCodigoPostal,
-        seguro_propio_vencimiento: miVtoSeguro
+        seguro_propio_vencimiento: miVtoSeguro,
+      };
+
+      const miClienteAgencia = {
+        ...cliente_agencia,
+        cobrador: stateCobrador,
+        zona: stateZona,
+        tarifa: stateTarifa,
       };
 
       if (!editar) {
-        addCliente(miCliente);
-        //Reseteo el form
-        //setCliente({
-        //  nombre: "",
-        //  provincia: {}
-        //});
+        addCliente(miCliente, miClienteAgencia);
       } else {
-        updateCliente(miCliente);
+        updateCliente(miCliente, miClienteAgencia);
       }
     }
   };
@@ -115,7 +146,10 @@ const ClientesForm = ({ editar }) => {
     actualizarStateTipo_Documento(tipo_documento);
     actualizarStateCodigoPostal(codigo_postal);
     actualizarStateCondicionIva(iva);
-  }, [tipo_documento, codigo_postal, iva]);
+    actualizarStateCobrador(cobrador);
+    actualizarStateZona(zona);
+    actualizarStateTarifa(tarifa);
+  }, [tipo_documento, codigo_postal, iva, cobrador, zona, tarifa]);
 
   return (
     <Fragment>
@@ -157,14 +191,10 @@ const ClientesForm = ({ editar }) => {
                 />
               </div>
 
-              <div className="p-col-6"></div>
-
               <div className="p-col-12 p-md-6">
                 <label style={{ marginTop: "1em" }}>Cond. I.V.A.*</label>
                 <SelectCondicionIva />
               </div>
-
-              <div className="p-col-6"></div>
 
               <div className="p-col-12 p-md-6">
                 <label style={{ marginTop: "1em" }}>Domicilio</label>
@@ -177,13 +207,10 @@ const ClientesForm = ({ editar }) => {
                   maxLength="150"
                 />
               </div>
-              <div className="p-col-6"></div>
               <div className="p-col-12 p-md-6">
                 <label style={{ marginTop: "1em" }}>Localidad*</label>
                 <SelectCodigoPostal />
               </div>
-
-              <div className="p-col-6"></div>
 
               <div className="p-col-12 p-md-6">
                 <label style={{ marginTop: "1em" }}>Teléfono</label>
@@ -196,7 +223,6 @@ const ClientesForm = ({ editar }) => {
                   maxLength="150"
                 />
               </div>
-              <div className="p-col-6"></div>
               <div className="p-col-12 p-md-6">
                 <label style={{ marginTop: "1em" }}>Email</label>
 
@@ -209,8 +235,6 @@ const ClientesForm = ({ editar }) => {
                 />
               </div>
 
-              <div className="p-col-6"></div>
-
               <div className="p-col-12 p-md-6">
                 <label style={{ marginTop: "1em" }}>Representante</label>
 
@@ -222,28 +246,123 @@ const ClientesForm = ({ editar }) => {
                   maxLength="150"
                 />
               </div>
-              <div className="p-col-12 p-md-6"></div>
-              <div className="p-col-12 p-md-3">
-                <label style={{ marginTop: "1em", marginRight: "1em" }}>
-                  Seguro Propio
+              <div className="p-col-12 p-md-6">
+                <label style={{ marginTop: "1em" }}>Cobrador*</label>
+                <SelectCobrador />
+              </div>
+              <div className="p-col-12 p-md-6">
+                <label style={{ marginTop: "1em" }}>Zona*</label>
+                <SelectZona />
+              </div>
+              <div className="p-col-12 p-md-6">
+                <label style={{ marginTop: "1em" }}>Tarifa*</label>
+                <SelectTarifa />
+              </div>
+
+              <div className="p-col-12 p-md-3 p-col-align-center">
+                <label
+                  style={{
+                    marginTop: "1em",
+                    marginRight: "1em",
+                  }}
+                >
+                  Tarifa Bulto
                 </label>
                 <Checkbox
-                  checked={seguro_propio}
-                  onChange={e => {
-                    setCliente({
-                      ...cliente,
-                      seguro_propio: e.checked
+                  checked={tarifa_bulto}
+                  onChange={(e) => {
+                    setClienteAgencia({
+                      ...cliente_agencia,
+                      tarifa_bulto: e.checked,
                     });
                   }}
                 />
               </div>
-              <div className="p-col-12 p-md-3">
-                <Calendar
-                  value={seguro_propio_vencimiento}
-                  onChange={e => {
+              <div className="p-col-12 p-md-3 p-col-align-center">
+                <label
+                  style={{
+                    marginTop: "1em",
+                    marginRight: "1em",
+                  }}
+                >
+                  Tarifa Kg
+                </label>
+                <Checkbox
+                  checked={tarifa_kg}
+                  onChange={(e) => {
+                    setClienteAgencia({
+                      ...cliente_agencia,
+                      tarifa_kg: e.checked,
+                    });
+                  }}
+                />
+              </div>
+              <div className="p-col-12 p-md-3 p-col-align-center">
+                <label
+                  style={{
+                    marginTop: "1em",
+                    marginRight: "1em",
+                  }}
+                >
+                  Tarifa m3
+                </label>
+                <Checkbox
+                  checked={tarifa_m3}
+                  onChange={(e) => {
+                    setClienteAgencia({
+                      ...cliente_agencia,
+                      tarifa_m3: e.checked,
+                    });
+                  }}
+                />
+              </div>
+
+              <div className="p-col-12 p-md-3 p-col-align-center">
+                <label
+                  style={{
+                    marginTop: "1em",
+                    marginRight: "1em",
+                  }}
+                >
+                  Tarifa %
+                </label>
+                <Checkbox
+                  checked={tarifa_porcentaje}
+                  onChange={(e) => {
+                    setClienteAgencia({
+                      ...cliente_agencia,
+                      tarifa_porcentaje: e.checked,
+                    });
+                  }}
+                />
+              </div>
+
+              <div className="p-col-12 p-md-3 p-col-align-center">
+                <label
+                  style={{
+                    marginTop: "1em",
+                    marginRight: "1em",
+                  }}
+                >
+                  Seguro Propio
+                </label>
+                <Checkbox
+                  checked={seguro_propio}
+                  onChange={(e) => {
                     setCliente({
                       ...cliente,
-                      seguro_propio_vencimiento: e.value
+                      seguro_propio: e.checked,
+                    });
+                  }}
+                />
+              </div>
+              <div className="p-col-12 p-md-3 p-col-align-center">
+                <Calendar
+                  value={seguro_propio_vencimiento}
+                  onChange={(e) => {
+                    setCliente({
+                      ...cliente,
+                      seguro_propio_vencimiento: e.value,
                     });
                   }}
                   locale={calendar_locale_es}
@@ -252,15 +371,26 @@ const ClientesForm = ({ editar }) => {
                   showIcon={true}
                   disabled={!seguro_propio}
                 />
-                {/* <InputMask
-                  mask="99/99/9999"
-                  value={seguro_propio_vencimiento}
-                  placeholder="99/99/9999"
-                  slotChar="dd/mm/yyyy"
-                  onChange={onChange}
-                ></InputMask> */}
               </div>
-              <div className="p-col-12 p-md-6"></div>
+              <div className="p-col-12 p-md-6 p-col-align-center">
+                <label
+                  style={{
+                    marginTop: "1em",
+                    marginRight: "1em",
+                  }}
+                >
+                  Cuenta Corriente
+                </label>
+                <Checkbox
+                  checked={cta_cte}
+                  onChange={(e) => {
+                    setClienteAgencia({
+                      ...cliente_agencia,
+                      cta_cte: e.checked,
+                    });
+                  }}
+                />
+              </div>
               <div className="p-col-12 p-md-2">
                 <Button
                   style={{ marginTop: "1em" }}
@@ -276,7 +406,9 @@ const ClientesForm = ({ editar }) => {
                   label="Cancelar"
                   icon="pi pi-undo"
                   className="p-button-primary"
-                  onClick={() => mostrarFormulario()}
+                  onClick={() => {
+                    mostrarFormulario();
+                  }}
                 />
               </div>
             </div>

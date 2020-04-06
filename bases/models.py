@@ -120,21 +120,23 @@ class Comprobante(MyModel):
 # MODELO EMPRESA
 class Empresa(MyModel):
     nombre = models.CharField(max_length=150)
-    domicilio = models.CharField(max_length=150)
+    domicilio = models.CharField(max_length=150, null=True, blank=True)
     codigo_postal = models.ForeignKey(Codigo_Postal, on_delete=models.CASCADE)
-    telefono = models.CharField(max_length=150)
+    telefono = models.CharField(max_length=150, null=True, blank=True)
     iva = models.ForeignKey(Condicion_IVA, on_delete=models.CASCADE)
-    cuit = models.CharField(max_length=150)
+    cuit = models.CharField(max_length=11, null=True, blank=True)
     inicio_actividades = models.DateField(null=True, blank=True)
-    iibb = models.CharField(max_length=50)
+    iibb = models.CharField(max_length=50, null=True, blank=True)
     logo = models.ImageField(upload_to='logo_pics', null=True, blank=True)
 
     def __str__(self):
         return '{}'.format(self.nombre)
 
     def save(self, *args, **kwargs):
-        self.nombre = self.nombre.upper()
-        self.domicilio = self.domicilio.upper()
+        if self.nombre:
+            self.nombre = self.nombre.upper()
+        if self.domicilio:
+            self.domicilio = self.domicilio.upper()
         super(Empresa, self).save(*args, **kwargs)
 
     class Meta:

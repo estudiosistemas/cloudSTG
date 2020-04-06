@@ -5,7 +5,7 @@ import { Dropdown } from "primereact/dropdown";
 
 import authContext from "../context/auth/authContext";
 
-const useTarifa = stateInicial => {
+const useTarifa = (stateInicial) => {
   //state del hook
   const [state, actualizarState] = useState(stateInicial);
   const [tarifaList, setTarifaList] = useState([]);
@@ -14,7 +14,7 @@ const useTarifa = stateInicial => {
   const authCtx = useContext(authContext);
   const { tokenConfig, agencia, user } = authCtx;
 
-  const onChange = e => {
+  const onChange = (e) => {
     actualizarState(e.value);
   };
 
@@ -22,14 +22,15 @@ const useTarifa = stateInicial => {
     if (agencia) {
       axios
         .get(`/api/tarifa-agencia/${agencia.id}`, tokenConfig())
-        .then(res => {
-          setTarifaList(res.data);
+        .then((res) => {
+          const lista = res.data.filter((el) => el.estado);
+          setTarifaList(lista);
         })
-        .catch(err => console.log(err.response.statusText));
+        .catch((err) => console.log(err.response.statusText));
     }
   }, [agencia]);
 
-  const miItemTemplate = option => option.nombre;
+  const miItemTemplate = (option) => option.nombre;
 
   const Seleccionar = () => {
     return (

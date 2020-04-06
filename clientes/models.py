@@ -40,11 +40,11 @@ class Clientes_Agencia(MyModel):
     cobrador = models.ForeignKey(Cobrador, on_delete=models.CASCADE)
     zona = models.ForeignKey(Zona, on_delete=models.CASCADE)
     tarifa = models.ForeignKey(Tarifa, on_delete=models.CASCADE)
-    tarifa_bulto = models.BooleanField
-    tarifa_kg = models.BooleanField
-    tarifa_m3 = models.BooleanField
-    tarifa_porcentaje = models.BooleanField
-    cta_cte = models.BooleanField
+    tarifa_bulto = models.BooleanField(default=True)
+    tarifa_kg = models.BooleanField(default=False)
+    tarifa_m3 = models.BooleanField(default=False)
+    tarifa_porcentaje = models.BooleanField(default=False)
+    cta_cte = models.BooleanField(default=True)
 
     def __str__(self):
         return "{} {}".format(self.agencia, self.cliente)

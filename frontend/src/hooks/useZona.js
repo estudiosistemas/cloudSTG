@@ -5,7 +5,7 @@ import { Dropdown } from "primereact/dropdown";
 
 import authContext from "../context/auth/authContext";
 
-const useZona = stateInicial => {
+const useZona = (stateInicial) => {
   //state del hook
   const [state, actualizarState] = useState(stateInicial);
   const [zonaList, setZonaList] = useState([]);
@@ -14,7 +14,7 @@ const useZona = stateInicial => {
   const authCtx = useContext(authContext);
   const { tokenConfig, agencia } = authCtx;
 
-  const onChange = e => {
+  const onChange = (e) => {
     actualizarState(e.value);
   };
 
@@ -22,14 +22,15 @@ const useZona = stateInicial => {
     if (agencia) {
       axios
         .get(`/api/zona-agencia/${agencia.id}`, tokenConfig())
-        .then(res => {
-          setZonaList(res.data);
+        .then((res) => {
+          const lista = res.data.filter((el) => el.estado);
+          setZonaList(lista);
         })
-        .catch(err => console.log(err.response.statusText));
+        .catch((err) => console.log(err.response.statusText));
     }
   }, [agencia]);
 
-  const miItemTemplate = option => option.nombre;
+  const miItemTemplate = (option) => option.nombre;
 
   const Seleccionar = () => {
     return (

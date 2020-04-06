@@ -1,6 +1,7 @@
 import React, { useEffect, Fragment, useState, useContext } from "react";
 
 import clienteContext from "../../context/clientes/clienteContext";
+import authContext from "../../context/auth/authContext";
 
 //Prime-React
 import { DataTable } from "primereact/datatable";
@@ -35,10 +36,17 @@ function Clientes(props) {
     mostrarFormulario,
     getClientes,
     setCliente,
-    toggleEstadoCliente
+    toggleEstadoCliente,
+    getClienteAgencia,
+    cliente_agencia,
+    setClienteAgencia,
   } = clienteCtx;
 
-  const setEstado = data => {
+  //auth state
+  const authCtx = useContext(authContext);
+  const { agencia } = authCtx;
+
+  const setEstado = (data) => {
     setCliente(data);
     data.estado = !data.estado;
     toggleEstadoCliente(data);
@@ -47,31 +55,27 @@ function Clientes(props) {
   const handleAgregar = () => {
     setEditar(false);
     setCliente({});
+    setClienteAgencia({});
     mostrarFormulario();
   };
 
-  const handleEditar = dato => {
+  const handleEditar = (dato) => {
     let miFechaVto = null;
     if (dato.seguro_propio_vencimiento) {
       miFechaVto = moment(dato.seguro_propio_vencimiento).toDate();
     }
     setCliente({ ...dato, seguro_propio_vencimiento: miFechaVto });
+    getClienteAgencia(agencia.id, dato.id);
     setEditar(true);
     mostrarFormulario();
   };
 
-  const handleInhabilitar = item => {
+  const handleInhabilitar = (item) => {
     setSelectedItem(item);
     toggleSidebar();
   };
 
-  const handleSetup = item => {
-    alert("Proximamente!");
-    //setSelectedItem(item);
-    //toggleSidebar();
-  };
-
-  const estadoTemplate = rowData => {
+  const estadoTemplate = (rowData) => {
     return (
       <span
         className={classNames("customer-badge", "status-" + rowData.estado)}
@@ -87,7 +91,6 @@ function Clientes(props) {
         //handleBorrar={handleBorrar}
         handleEditar={handleEditar}
         handleInhabilitar={handleInhabilitar}
-        handleSetup={handleSetup}
         rowData={rowData}
       />
     );
@@ -99,7 +102,7 @@ function Clientes(props) {
 
   let dt = React.createRef();
 
-  const onEstadoChange = event => {
+  const onEstadoChange = (event) => {
     dt.filter(event.value, "estado", "equals");
     setFiltroEstado(event.value);
   };
@@ -107,7 +110,7 @@ function Clientes(props) {
   const estados = [
     { label: "ACTIVOS", value: "true" },
     { label: "INACTIVOS", value: "false" },
-    { label: "TODOS", value: null }
+    { label: "TODOS", value: null },
   ];
 
   const estadoFilter = (
@@ -120,7 +123,7 @@ function Clientes(props) {
     />
   );
 
-  const rowExpansionTemplate = data => {
+  const rowExpansionTemplate = (data) => {
     let vencido = false;
     if (moment().diff(data.seguro_propio_vencimiento, "days") > 0) {
       vencido = true;
@@ -180,7 +183,7 @@ function Clientes(props) {
                     <Moment locale="es" format="DD-MM-YYYY">
                       {data.seguro_propio_vencimiento}
                     </Moment>,
-                    vencido ? " (VENCIDO)" : null
+                    vencido ? " (VENCIDO)" : null,
                   ]
                 : null}
             </div>
@@ -225,7 +228,7 @@ function Clientes(props) {
               ></i>
               <InputText
                 type="search"
-                onInput={e => setglobalFilter(e.target.value)}
+                onInput={(e) => setglobalFilter(e.target.value)}
                 placeholder="Buscar"
                 size="50"
               />
@@ -240,7 +243,7 @@ function Clientes(props) {
             </div>
             <div className="datatable-doc-demo">
               <DataTable
-                ref={el => (dt = el)}
+                ref={(el) => (dt = el)}
                 style={{ margin: "20px 0px 0px 0px" }}
                 value={clientes}
                 globalFilter={globalFilter}
@@ -251,7 +254,7 @@ function Clientes(props) {
                 className="p-datatable-customers"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 expandedRows={expandedRows}
-                onRowToggle={e => setExpandedRows(e.data)}
+                onRowToggle={(e) => setExpandedRows(e.data)}
                 // onRowExpand={e => {
                 //   if (!e.data.leida) setLeida(e.data);
                 // }}

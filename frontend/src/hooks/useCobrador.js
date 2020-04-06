@@ -5,7 +5,7 @@ import { Dropdown } from "primereact/dropdown";
 
 import authContext from "../context/auth/authContext";
 
-const useCobrador = stateInicial => {
+const useCobrador = (stateInicial) => {
   //state del hook
   const [state, actualizarState] = useState(stateInicial);
   const [cobradorList, setCobradorList] = useState([]);
@@ -14,7 +14,7 @@ const useCobrador = stateInicial => {
   const authCtx = useContext(authContext);
   const { tokenConfig, agencia, user } = authCtx;
 
-  const onChange = e => {
+  const onChange = (e) => {
     actualizarState(e.value);
   };
 
@@ -22,14 +22,15 @@ const useCobrador = stateInicial => {
     if (agencia) {
       axios
         .get(`/api/cobrador-agencia/${agencia.id}`, tokenConfig())
-        .then(res => {
-          setCobradorList(res.data);
+        .then((res) => {
+          const lista = res.data.filter((el) => el.estado);
+          setCobradorList(lista);
         })
-        .catch(err => console.log(err.response.statusText));
+        .catch((err) => console.log(err.response.statusText));
     }
   }, [agencia]);
 
-  const miItemTemplate = option => option.nombre;
+  const miItemTemplate = (option) => option.nombre;
 
   const Seleccionar = () => {
     return (
