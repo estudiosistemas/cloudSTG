@@ -19,17 +19,17 @@ import {
   SET_AGENCIA,
   UPDATE_USER,
   UPDATE_PROFILE,
-  UPDATE_PROFILE_IMG
+  UPDATE_PROFILE_IMG,
 } from "../../types/auth";
 import Profile from "../../components/accounts/Profile";
 
-const AuthState = props => {
+const AuthState = (props) => {
   const initialState = {
     token: localStorage.getItem("token"),
     isAuthenticated: null,
     isLoading: false,
     user: null,
-    agencia: null
+    agencia: null,
   };
 
   //Dispatch para ejecutar las acciones
@@ -46,20 +46,20 @@ const AuthState = props => {
 
     axios
       .get("/api/auth/user", tokenConfig())
-      .then(res => {
+      .then((res) => {
         dispatch({
           type: USER_LOADED,
-          payload: res.data
+          payload: res.data,
         });
       })
-      .catch(err => {
-        showMessage({
-          msg: err.response.data,
-          title: "Error",
-          type: "error"
-        });
+      .catch((err) => {
+        // showMessage({
+        //   msg: err.response.data,
+        //   title: "Error",
+        //   type: "error"
+        // });
         dispatch({
-          type: AUTH_ERROR
+          type: AUTH_ERROR,
         });
       });
   };
@@ -70,8 +70,8 @@ const AuthState = props => {
     //headers
     const config = {
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     };
 
     //request body
@@ -79,25 +79,25 @@ const AuthState = props => {
 
     axios
       .post("/api/auth/login", body, config)
-      .then(res => {
+      .then((res) => {
         dispatch({
           type: LOGIN_SUCCESS,
-          payload: res.data
+          payload: res.data,
         });
         showMessage({
           msg: "Credenciales correctas",
           title: "Bienvenido",
-          type: "success"
+          type: "success",
         });
       })
-      .catch(err => {
+      .catch((err) => {
         showMessage({
           msg: err.response.data,
           title: "Error",
-          type: "error"
+          type: "error",
         });
         dispatch({
-          type: LOGIN_FAIL
+          type: LOGIN_FAIL,
         });
       });
   };
@@ -106,16 +106,16 @@ const AuthState = props => {
   const logout = () => {
     axios
       .post("/api/auth/logout/", null, tokenConfig())
-      .then(res => {
+      .then((res) => {
         dispatch({
-          type: LOGOUT_SUCCESS
+          type: LOGOUT_SUCCESS,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         showMessage({
           msg: err.response.data,
           title: "Error",
-          type: "error"
+          type: "error",
         });
       });
   };
@@ -128,8 +128,8 @@ const AuthState = props => {
     //headers
     const config = {
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     };
 
     // if token, add to headers config
@@ -146,8 +146,8 @@ const AuthState = props => {
     //headers
     const config = {
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     };
 
     //request body
@@ -155,29 +155,29 @@ const AuthState = props => {
 
     axios
       .post("/api/auth/register", body, config)
-      .then(res => {
+      .then((res) => {
         dispatch({
           type: REGISTER_SUCCESS,
-          payload: res.data
+          payload: res.data,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         showMessage({
           msg: err.response.data,
           title: "Error",
-          type: "error"
+          type: "error",
         });
         dispatch({
-          type: REGISTER_FAIL
+          type: REGISTER_FAIL,
         });
       });
   };
 
   //Guardo AGENCIA seleccionada en state
-  const setAgencia = agencia => {
+  const setAgencia = (agencia) => {
     dispatch({
       type: SET_AGENCIA,
-      payload: agencia
+      payload: agencia,
     });
   };
 
@@ -191,27 +191,27 @@ const AuthState = props => {
       last_name: usuario.last_name,
       profile: {
         domicilio: usuario.domicilio,
-        telefono: usuario.telefono
-      }
+        telefono: usuario.telefono,
+      },
     };
     axios
       .put(`/api/user/update/${usuario.id}/`, miUsuario, tokenConfig())
-      .then(res => {
+      .then((res) => {
         dispatch({
           type: UPDATE_USER,
-          payload: res.data
+          payload: res.data,
         });
         showMessage({
           msg: "Datos de usuario actualizados",
           title: "Datos de Perfil",
-          type: "success"
+          type: "success",
         });
       })
-      .catch(err =>
+      .catch((err) =>
         showMessage({
           msg: err.response.data,
           title: "Error",
-          type: "error"
+          type: "error",
         })
       );
     if (image) {
@@ -224,18 +224,18 @@ const AuthState = props => {
           uploadData,
           tokenConfig()
         )
-        .then(res => {
+        .then((res) => {
           dispatch({
             type: UPDATE_PROFILE_IMG,
-            payload: res.data.image
+            payload: res.data.image,
           });
           showMessage({
             msg: "Imagen actualizada!",
             title: "Imagen de Perfil",
-            type: "success"
+            type: "success",
           });
         })
-        .catch(err => console.log(err.response));
+        .catch((err) => console.log(err.response));
     }
     return;
   };
@@ -253,7 +253,7 @@ const AuthState = props => {
         logout,
         tokenConfig,
         setAgencia,
-        updateUser
+        updateUser,
       }}
     >
       {props.children}

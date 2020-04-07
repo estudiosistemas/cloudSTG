@@ -5,12 +5,12 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
-        }
+          loader: "babel-loader",
+        },
       },
       {
         test: /\.css$/,
-        loader: ["style-loader", "css-loader"]
+        loader: ["style-loader", "css-loader"],
       },
       {
         test: /\.s[ac]ss$/i,
@@ -20,9 +20,9 @@ module.exports = {
           // Translates CSS into CommonJS
           "css-loader",
           // Compiles Sass to CSS
-          "sass-loader"
-        ]
-      }
-    ]
-  }
+          "sass-loader",
+        ],
+      },
+    ],
+  },
 };

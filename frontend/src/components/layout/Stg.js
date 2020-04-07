@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import {
   HashRouter as Router,
   Route,
-  Switch,
+  Redirect,
   useHistory,
 } from "react-router-dom";
 import classNames from "classnames";
@@ -338,13 +338,7 @@ const Stg = (props) => {
   });
 
   if (!isAuthenticated) {
-    return (
-      <div>
-        <h1>No autenticado</h1>
-        <br />
-        <Link to="/login">Login</Link>
-      </div>
-    );
+    return <Redirect to="/login" />;
   } else
     return (
       <div className={wrapperClass} onClick={onWrapperClick}>

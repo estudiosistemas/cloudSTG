@@ -1,5 +1,5 @@
 import React, { useState, useContext, Fragment } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 import authContext from "../../context/auth/authContext";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
@@ -12,7 +12,9 @@ function Login() {
   const authCtx = useContext(authContext);
   const { isAuthenticated, login } = authCtx;
 
-  const handleSubmit = e => {
+  let history = useHistory();
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     login(username, password);
   };
@@ -23,12 +25,12 @@ function Login() {
 
   return (
     <Fragment>
-      <div className="p-grid  p-align-center p-justify-center">
-        <div className="card" style={{ margin: "100px 0px 0px 0px" }}>
-          <h1>Login</h1>
-          <br />
-          <form onSubmit={handleSubmit}>
-            <div className="p-col-12 p-md-4">
+      <div className="p-grid p-fluid p-align-center p-justify-center">
+        <div className="p-col-3">
+          <div className="card" style={{ margin: "100px 0px 0px 0px" }}>
+            <h1>Login</h1>
+            <br />
+            <form onSubmit={handleSubmit}>
               <div className="p-inputgroup">
                 <span className="p-inputgroup-addon">
                   <i className="pi pi-user"></i>
@@ -38,15 +40,13 @@ function Login() {
                   id="username"
                   type="text"
                   name="username"
-                  onChange={e => setUserName(e.target.value)}
+                  onChange={(e) => setUserName(e.target.value)}
                   value={username}
-                  size="40"
+                  autoFocus
                 />
               </div>
-            </div>
 
-            <div className="p-col-12 p-md-4">
-              <div className="p-inputgroup">
+              <div className="p-inputgroup" style={{ marginTop: "1em" }}>
                 <span className="p-inputgroup-addon">
                   <i className="pi pi-lock"></i>
                 </span>
@@ -56,25 +56,30 @@ function Login() {
                   type="password"
                   className="form-control"
                   name="password"
-                  onChange={e => setPassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value)}
                   value={password}
-                  size="40"
+                  //size="40"
                 />
               </div>
-            </div>
 
-            <Button
-              style={{ margin: "20px 0px 0px 0px" }}
-              label="Login"
-              icon="pi pi-check"
-              className="p-button-success"
-              type="submit"
-            />
-
-            <p>
-              Dont' have an account? <Link to="/register">Register</Link>
-            </p>
-          </form>
+              <Button
+                style={{ margin: "20px 0px 0px 0px" }}
+                label="Login"
+                icon="pi pi-check"
+                className="p-button-success"
+                type="submit"
+              />
+              <Button
+                style={{ margin: "10px 0px 0px 0px" }}
+                label="Salir"
+                icon="pi pi-check"
+                className="p-button-primary"
+                onClick={() => {
+                  history.push("/");
+                }}
+              />
+            </form>
+          </div>
         </div>
       </div>
     </Fragment>
