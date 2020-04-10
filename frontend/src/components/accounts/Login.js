@@ -65,14 +65,14 @@ function Login() {
               <Button
                 style={{ margin: "20px 0px 0px 0px" }}
                 label="Login"
-                icon="pi pi-check"
+                icon="pi pi-sign-in"
                 className="p-button-success"
                 type="submit"
               />
               <Button
                 style={{ margin: "10px 0px 0px 0px" }}
                 label="Salir"
-                icon="pi pi-check"
+                icon="pi pi-arrow-left"
                 className="p-button-primary"
                 onClick={() => {
                   history.push("/");

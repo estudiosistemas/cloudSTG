@@ -20,7 +20,7 @@ import ClienteState from "../../context/clientes/clienteState";
 
 import notificacionContext from "../../context/notificaciones/notificacionContext";
 
-import Agencias from "../bases/agencias/agencias";
+import Agencias from "../agencias/Agencias";
 import AppMenu from "./AppMenu";
 import AppTopbar from "./AppTopbar";
 import AppProfile from "./AppProfile";
@@ -132,7 +132,7 @@ const Stg = (props) => {
           label: "Configuración",
           icon: "pi pi-fw pi-bars",
           command: () => {
-            history.push("/stg");
+            history.push("/stg/agencia");
           },
         },
         {
@@ -414,6 +414,12 @@ const Stg = (props) => {
               }}
             />
           </CondicionIVAState>
+          <Route
+            path="/stg/agencia"
+            render={(props) => {
+              return <Agencias {...props} />;
+            }}
+          />
           <CobradorState>
             <Route
               path="/stg/cobradores"

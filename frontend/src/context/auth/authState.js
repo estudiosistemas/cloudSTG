@@ -20,6 +20,8 @@ import {
   UPDATE_USER,
   UPDATE_PROFILE,
   UPDATE_PROFILE_IMG,
+  UPDATE_AGENCIA,
+  UPDATE_AGENCIA_IMG,
 } from "../../types/auth";
 import Profile from "../../components/accounts/Profile";
 
@@ -181,10 +183,10 @@ const AuthState = (props) => {
     });
   };
 
-  //UPDATE User
+  //UPDATE Usuario
   const updateUser = (usuario, image) => {
     //Actualizo datos usuario
-    const miUsuario = {
+    const miusuario = {
       username: usuario.username,
       email: usuario.email,
       first_name: usuario.first_name,
@@ -195,7 +197,7 @@ const AuthState = (props) => {
       },
     };
     axios
-      .put(`/api/user/update/${usuario.id}/`, miUsuario, tokenConfig())
+      .put(`/api/user/update/${usuario.id}/`, miusuario, tokenConfig())
       .then((res) => {
         dispatch({
           type: UPDATE_USER,
@@ -240,6 +242,57 @@ const AuthState = (props) => {
     return;
   };
 
+  //UPDATE Agencia
+  const updateAgencia = (agencia, image) => {
+    //Actualizo datos agencia
+    const { localidades } = agencia;
+    const miLocalidades = localidades.map((loc) => loc.codigo);
+    const miAgencia = {
+      ...agencia,
+      localidades: miLocalidades,
+    };
+    axios
+      .put(`/api/agencias/${agencia.id}/`, miAgencia, tokenConfig())
+      .then((res) => {
+        dispatch({
+          type: UPDATE_AGENCIA,
+          payload: agencia,
+        });
+        showMessage({
+          msg: "Datos de Agencia actualizados",
+          title: "Agencia",
+          type: "success",
+        });
+      })
+      .catch((err) =>
+        showMessage({
+          msg: err.response.data,
+          title: "Error",
+          type: "error",
+        })
+      );
+    if (image) {
+      //Actualizo imagen
+      const uploadData = new FormData();
+      uploadData.append("logo", image, image.name);
+      axios
+        .put(`/api/agencia/img/${agencia.id}/`, uploadData, tokenConfig())
+        .then((res) => {
+          dispatch({
+            type: UPDATE_AGENCIA_IMG,
+            payload: res.data.logo,
+          });
+          showMessage({
+            msg: "Logo actualizado!",
+            title: "Agencia",
+            type: "success",
+          });
+        })
+        .catch((err) => console.log(err.response));
+    }
+    return;
+  };
+
   return (
     <authContext.Provider
       value={{
@@ -254,6 +307,7 @@ const AuthState = (props) => {
         tokenConfig,
         setAgencia,
         updateUser,
+        updateAgencia,
       }}
     >
       {props.children}

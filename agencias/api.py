@@ -2,8 +2,8 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets, permissions, generics
 from rest_framework.response import Response
-from .serializers import Agencias_UserSerializer, CobradorSerializer, TarifaSerializer, ZonaSerializer
-from .models import Cobrador, Tarifa, Zona
+from .serializers import Agencias_UserSerializer, CobradorSerializer, TarifaSerializer, ZonaSerializer, AgenciaSerializer, ImgAgenciaUpdateSerializer
+from .models import Cobrador, Tarifa, Zona, Agencia
 from accounts.models import Profile
 from bases.api import GetPermisionViewSet
 from rest_framework.views import APIView
@@ -19,6 +19,17 @@ class Agencias_User(APIView):
         agen = get_object_or_404(Profile, user_id=codigo)
         data = Agencias_UserSerializer(agen).data
         return Response(data)
+
+
+class AgenciaViewSet(GetPermisionViewSet):
+    serializer_class = AgenciaSerializer
+    queryset = Agencia.objects.all()
+
+
+class ImgAgenciaUpdateViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ImgAgenciaUpdateSerializer
+    queryset = Agencia.objects.all()
 
 
 class CobradorViewSet(GetPermisionViewSet):

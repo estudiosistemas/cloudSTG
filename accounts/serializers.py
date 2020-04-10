@@ -80,9 +80,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         instance.save()
         usr_id = User.objects.values_list('id', flat=True).get(
             username=validated_data['username'])
-        print(usr_id)
         profile_data = validated_data['profile']
-        print(profile_data['domicilio'])
         Profile.objects.filter(user_id=usr_id).update(
             domicilio=profile_data['domicilio'], telefono=profile_data['telefono'])
         return instance

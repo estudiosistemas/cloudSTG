@@ -1,12 +1,26 @@
 from rest_framework import serializers
 from .models import Agencia, Cobrador, Tarifa, Zona
+from bases.serializers import CodigoPostalSerializer
 from accounts.models import Profile
 
 
 class AgenciaSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Agencia
-        fields = ['id', 'nombre']
+        #fields = '__all__'
+        exclude = ['logo']
+
+
+class ImgAgenciaUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Agencia
+        fields = ('logo',)
+
+    def update(self, instance, validated_data):
+        instance.logo = validated_data['logo']
+        instance.save()
+        return instance
 
 
 class Agencias_UserSerializer(serializers.ModelSerializer):
@@ -15,7 +29,7 @@ class Agencias_UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['agencias']
-        depth = 1
+        depth = 3
 
 
 class CobradorSerializer(serializers.ModelSerializer):

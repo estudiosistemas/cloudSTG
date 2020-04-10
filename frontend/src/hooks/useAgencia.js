@@ -5,7 +5,7 @@ import { Dropdown } from "primereact/dropdown";
 
 import authContext from "../context/auth/authContext";
 
-const useAgencia = stateInicial => {
+const useAgencia = (stateInicial) => {
   //state del hook
   const [state, actualizarState] = useState(stateInicial);
   const [agenciasList, setAgenciasList] = useState([]);
@@ -14,7 +14,7 @@ const useAgencia = stateInicial => {
   const authCtx = useContext(authContext);
   const { tokenConfig, user, agencia, setAgencia } = authCtx;
 
-  const onChange = e => {
+  const onChange = (e) => {
     actualizarState(e.value);
     setAgencia(e.value);
   };
@@ -22,15 +22,33 @@ const useAgencia = stateInicial => {
   useEffect(() => {
     axios
       .get(`/api/auth/agenciasusuario/${user.id}`, tokenConfig())
-      .then(res => {
+      .then((res) => {
         setAgenciasList(res.data.agencias);
         actualizarState(res.data.agencias[0]);
         setAgencia(res.data.agencias[0]);
       })
-      .catch(err => console.log(err.response.statusText));
+      .catch((err) => console.log(err.response.statusText));
   }, []);
 
-  const miItemTemplate = option => option.nombre;
+  // Localizo la agencia a reemplazar y creo una nueva lista con el reemplazo para despues actualizar agenciasList
+  const actualizarListaAgencias = (agenciaVieja, agenciaNueva) => {
+    const pos = agenciasList.indexOf(agenciaVieja);
+    let lista = agenciasList;
+    lista.splice(pos, 1, agenciaNueva);
+    setAgenciasList(lista);
+  };
+
+  //Al actualizar los datos de la agencia, debo actualizar el hook de agencias
+  useEffect(() => {
+    if (agencia) {
+      if (state != agencia) {
+        actualizarListaAgencias(state, agencia);
+        actualizarState(agencia);
+      }
+    }
+  }, [agencia]);
+
+  const miItemTemplate = (option) => option.nombre;
 
   const Seleccionar = () => {
     return (

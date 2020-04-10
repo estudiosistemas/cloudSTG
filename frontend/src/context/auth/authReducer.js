@@ -9,15 +9,17 @@ import {
   REGISTER_FAIL,
   SET_AGENCIA,
   UPDATE_USER,
-  UPDATE_PROFILE_IMG
+  UPDATE_PROFILE_IMG,
+  UPDATE_AGENCIA,
+  UPDATE_AGENCIA_IMG,
 } from "../../types/auth";
 
-export default function(state, action) {
+export default function (state, action) {
   switch (action.type) {
     case USER_LOADING:
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
       };
 
     case USER_LOADED:
@@ -25,7 +27,7 @@ export default function(state, action) {
         ...state,
         isAuthenticated: true,
         isLoading: false,
-        user: action.payload
+        user: action.payload,
       };
     case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
@@ -34,7 +36,7 @@ export default function(state, action) {
         ...state,
         ...action.payload,
         isAuthenticated: true,
-        isLoading: false
+        isLoading: false,
       };
     case AUTH_ERROR:
     case LOGIN_FAIL:
@@ -46,12 +48,12 @@ export default function(state, action) {
         token: null,
         user: null,
         isAuthenticated: false,
-        isLoading: false
+        isLoading: false,
       };
     case SET_AGENCIA:
       return {
         ...state,
-        agencia: action.payload
+        agencia: action.payload,
       };
     case UPDATE_PROFILE_IMG:
       return {
@@ -60,10 +62,11 @@ export default function(state, action) {
           ...state.user,
           profile: {
             ...state.user.profile,
-            image: action.payload
-          }
-        }
+            image: action.payload,
+          },
+        },
       };
+
     case UPDATE_USER:
       return {
         ...state,
@@ -76,9 +79,31 @@ export default function(state, action) {
           profile: {
             ...state.user.profile,
             domicilio: action.payload.profile.domicilio,
-            telefono: action.payload.profile.telefono
-          }
-        }
+            telefono: action.payload.profile.telefono,
+          },
+        },
+      };
+    case UPDATE_AGENCIA_IMG:
+      return {
+        ...state,
+        agencia: {
+          ...state.agencia,
+          logo: action.payload,
+        },
+      };
+
+    case UPDATE_AGENCIA:
+      return {
+        ...state,
+        agencia: {
+          ...state.agencia,
+          nombre: action.payload.nombre,
+          domicilio: action.payload.domicilio,
+          telefono: action.payload.telefono,
+          porcentaje: action.payload.porcentaje,
+          porcentaje_Bs_As: action.payload.porcentaje_Bs_As,
+          localidades: action.payload.localidades,
+        },
       };
     default:
       return state;

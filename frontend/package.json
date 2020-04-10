@@ -54,6 +54,7 @@
     "redux-thunk": "^2.3.0",
     "sass-loader": "^8.0.2",
     "styled-components": "^5.0.1",
+    "underscore": "^1.10.2",
     "validator": "^13.0.0"
   }
 }
