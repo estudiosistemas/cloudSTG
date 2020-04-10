@@ -46,6 +46,7 @@
     "react-data-table-component": "^6.3.4",
     "react-image-crop": "^8.6.1",
     "react-moment": "^0.9.7",
+    "react-page-loading": "^1.0.2",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
     "react-transition-group": "^4.3.0",
@@ -55,6 +56,7 @@
     "sass-loader": "^8.0.2",
     "styled-components": "^5.0.1",
     "underscore": "^1.10.2",
+    "url-loader": "^4.1.0",
     "validator": "^13.0.0"
   }
 }

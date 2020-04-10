@@ -11,10 +11,10 @@ import Landing from "./landing/Landing";
 import Stg from "./layout/Stg";
 
 //primereact
-//import "primereact/resources/themes/nova-light/theme.css";
-//import "primereact/resources/primereact.min.css";
-//import "primeicons/primeicons.css";
-//import "primeflex/primeflex.css";
+import "primereact/resources/themes/nova-light/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
+import "primeflex/primeflex.css";
 // import "@fullcalendar/core/main.css";
 // import "@fullcalendar/daygrid/main.css";
 // import "@fullcalendar/timegrid/main.css";
@@ -25,6 +25,7 @@ import "./App.scss";
 import Alertas from "./layout/Alertas";
 
 import Login from "./accounts/Login";
+import Page from "react-page-loading";
 
 //importar states
 import AuthState from "../context/auth/authState";
@@ -42,24 +43,17 @@ import NotificacionState from "../context/notificaciones/notificacionState";
 // };
 
 const App = () => {
-  //auth state
-  // const authCtx = useContext(authContext);
-  // const { loadUser, isAuthenticated, isLoading } = authCtx;
-
-  // useEffect(() => {
-  //   loadUser();
-  // }, []);
-
   return (
-    //<AlertProvider template={AlertTemplate} {...alertOptions}>
     <Router>
       <Fragment>
-        <Alertas />
-        <Route exact path="/" component={Landing} />
-        <Route exact path="/login" component={Login} />
-        <NotificacionState>
-          <Route path="/stg" render={props => <Stg {...props} />} />
-        </NotificacionState>
+        <Page loader={"resize-spin"} color={"#1fa1fc"} size={6}>
+          <Alertas />
+          <Route exact path="/" component={Landing} />
+          <Route exact path="/login" component={Login} />
+          <NotificacionState>
+            <Route path="/stg" render={(props) => <Stg {...props} />} />
+          </NotificacionState>
+        </Page>
       </Fragment>
     </Router>
     //</AlertProvider>
