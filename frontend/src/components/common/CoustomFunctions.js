@@ -1,6 +1,6 @@
 import moment from "moment";
 
-export const isEmpty = string => {
+export const isEmpty = (string) => {
   !string || !string.length;
 };
 
@@ -10,7 +10,7 @@ export const keyBy = (arr, key) =>
     return acc;
   });
 
-export const dateCalendarToSave = fecha_calendar => {
+export const dateCalendarToSave = (fecha_calendar) => {
   let miFecha = null;
   if (fecha_calendar) {
     let dia = fecha_calendar.getDate();
@@ -20,3 +20,22 @@ export const dateCalendarToSave = fecha_calendar => {
   }
   return miFecha;
 };
+
+export function retry(fn, retriesLeft = 5, interval = 1000) {
+  return new Promise((resolve, reject) => {
+    fn()
+      .then(resolve)
+      .catch((error) => {
+        setTimeout(() => {
+          if (retriesLeft === 1) {
+            // reject('maximum retries exceeded');
+            reject(error);
+            return;
+          }
+
+          // Passing on "reject" is the important part
+          retry(fn, retriesLeft - 1, interval).then(resolve, reject);
+        }, interval);
+      });
+  });
+}

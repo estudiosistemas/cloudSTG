@@ -1,4 +1,13 @@
+const path = require("path");
+
 module.exports = {
+  entry: path.resolve(__dirname, "src/index.js"),
+  output: {
+    path: path.resolve("./static/frontend/"),
+    filename: "main.js",
+    chunkFilename: "[name].main.js",
+    publicPath: "./static/frontend/",
+  },
   module: {
     rules: [
       {

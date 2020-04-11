@@ -1,14 +1,11 @@
-import React, { Fragment, useContext, useEffect } from "react";
+import React, { lazy, Suspense } from "react";
 import { render } from "react-dom";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import "@babel/polyfill";
 
-// import { transitions, positions, Provider as AlertProvider } from "react-alert";
+import Spinner from "./layout/Spinner";
 
-// import AlertTemplate from "react-alert-template-basic";
-
-import Landing from "./landing/Landing";
-import Stg from "./layout/Stg";
+const Landing = lazy(() => import("./landing/Landing"));
 
 //primereact
 import "primereact/resources/themes/nova-light/theme.css";
@@ -23,40 +20,27 @@ import "./layout/layout.scss";
 import "./App.scss";
 
 import Alertas from "./layout/Alertas";
-
 import Login from "./accounts/Login";
-import Page from "react-page-loading";
+import Stg from "./layout/Stg";
+//const Stg = lazy(() => retry(() => import("./layout/Stg")));
 
 //importar states
 import AuthState from "../context/auth/authState";
 import GlobalState from "../context/global/globalState";
 import NotificacionState from "../context/notificaciones/notificacionState";
 
-//import authContext from "../context/auth/authContext";
-
-//Alet options
-// const alertOptions = {
-//   position: positions.TOP_RIGHT,
-//   timeout: 3000,
-//   offset: "60px",
-//   transition: transitions.SCALE
-// };
-
 const App = () => {
   return (
     <Router>
-      <Fragment>
-        <Page loader={"resize-spin"} color={"#1fa1fc"} size={6}>
-          <Alertas />
-          <Route exact path="/" component={Landing} />
-          <Route exact path="/login" component={Login} />
-          <NotificacionState>
-            <Route path="/stg" render={(props) => <Stg {...props} />} />
-          </NotificacionState>
-        </Page>
-      </Fragment>
+      <Alertas />
+      <Suspense fallback={<Spinner />}>
+        <Route exact path="/" component={Landing} />
+        <Route exact path="/login" component={Login} />
+        <NotificacionState>
+          <Route path="/stg" render={(props) => <Stg {...props} />} />
+        </NotificacionState>
+      </Suspense>
     </Router>
-    //</AlertProvider>
   );
 };
 

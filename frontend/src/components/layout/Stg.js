@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, lazy, Suspense } from "react";
 import {
   HashRouter as Router,
   Route,
@@ -6,10 +6,7 @@ import {
   useHistory,
 } from "react-router-dom";
 import classNames from "classnames";
-
-import { Link } from "react-router-dom";
-import Header from "./Header";
-import Provincias from "../bases/tablas/Provincias";
+import { retry } from "../common/CoustomFunctions";
 
 //importar states
 import ProvinciaState from "../../context/tablas/provincias/provinciaState";
@@ -17,28 +14,46 @@ import AlicuotaState from "../../context/tablas/alicuotas/alicuotaState";
 import CodigoPostalState from "../../context/tablas/codigos_postales/codigopostalState";
 import CondicionIVAState from "../../context/tablas/condicionIVA/condicionIVAState";
 import ClienteState from "../../context/clientes/clienteState";
-
-import notificacionContext from "../../context/notificaciones/notificacionContext";
-
-import Agencias from "../agencias/Agencias";
-import AppMenu from "./AppMenu";
-import AppTopbar from "./AppTopbar";
-import AppProfile from "./AppProfile";
-import AppFooter from "./AppFooter";
-import authContext from "../../context/auth/authContext";
-import Alicuotas from "../bases/tablas/Alicuotas";
-import CodigosPostales from "../bases/tablas/CodigosPostales";
-import CondicionIVA from "../bases/tablas/CondicionIVA";
-import Profile from "../accounts/Profile";
-import Clientes from "../clientes/Clientes";
-import Notificaciones from "../notificaciones/Notificaciones";
-import Dashboard from "./Dashboard";
 import CobradorState from "../../context/agencias/cobradores/cobradorState";
-import Cobradores from "../agencias/cobradores/Cobradores";
 import ZonaState from "../../context/agencias/zonas/zonaState";
-import Zonas from "../agencias/zonas/Zonas";
 import TarifaState from "../../context/agencias/tarifas/tarifaState";
-import Tarifas from "../agencias/tarifas/Tarifas";
+
+//importar contexts
+import notificacionContext from "../../context/notificaciones/notificacionContext";
+import authContext from "../../context/auth/authContext";
+
+//importar componentes
+import AppMenu from "./AppMenu";
+//const AppMenu = lazy(() => retry(() => import("./AppMenu")));
+import AppTopbar from "./AppTopbar";
+//const AppTopbar = lazy(() => retry(() => import("./AppTopbar")));
+import AppProfile from "./AppProfile";
+//const AppProfile = lazy(() => retry(() => import("./AppProfile")));
+import AppFooter from "./AppFooter";
+import Spinner from "./Spinner";
+//const AppFooter = lazy(() => retry(() => import("./AppFooter")));
+const Alicuotas = lazy(() => retry(() => import("../bases/tablas/Alicuotas")));
+const CodigosPostales = lazy(() =>
+  retry(() => import("../bases/tablas/CodigosPostales"))
+);
+const CondicionIVA = lazy(() =>
+  retry(() => import("../bases/tablas/CondicionIVA"))
+);
+const Profile = lazy(() => retry(() => import("../accounts/Profile")));
+const Clientes = lazy(() => retry(() => import("../clientes/Clientes")));
+const Provincias = lazy(() =>
+  retry(() => import("../bases/tablas/Provincias"))
+);
+const Agencias = lazy(() => retry(() => import("../agencias/Agencias")));
+const Notificaciones = lazy(() =>
+  retry(() => import("../notificaciones/Notificaciones"))
+);
+const Dashboard = lazy(() => retry(() => import("./Dashboard")));
+const Cobradores = lazy(() =>
+  retry(() => import("../agencias/cobradores/Cobradores"))
+);
+const Zonas = lazy(() => retry(() => import("../agencias/zonas/Zonas")));
+const Tarifas = lazy(() => retry(() => import("../agencias/tarifas/Tarifas")));
 
 const Stg = (props) => {
   const [layoutMode, setlayoutMode] = useState("static");
@@ -356,103 +371,105 @@ const Stg = (props) => {
         </div>
 
         <div className="layout-main">
-          <Route
-            path="/stg/dashboard"
-            render={(props) => {
-              return <Dashboard {...props} />;
-            }}
-          />
-          <Route
-            path="/stg/profile"
-            render={(props) => {
-              return <Profile {...props} />;
-            }}
-          />
-          <Route
-            path="/stg/notificaciones"
-            render={(props) => {
-              return <Notificaciones {...props} />;
-            }}
-          />
-          <ClienteState>
+          <Suspense fallback={<Spinner />}>
             <Route
-              path="/stg/clientes"
+              path="/stg/dashboard"
               render={(props) => {
-                return <Clientes {...props} />;
+                return <Dashboard {...props} />;
               }}
             />
-          </ClienteState>
-          <ProvinciaState>
             <Route
-              path="/stg/provincias"
+              path="/stg/profile"
               render={(props) => {
-                return <Provincias {...props} />;
+                return <Profile {...props} />;
               }}
             />
-          </ProvinciaState>
-          <CodigoPostalState>
             <Route
-              path="/stg/codigospostales"
+              path="/stg/notificaciones"
               render={(props) => {
-                return <CodigosPostales {...props} />;
+                return <Notificaciones {...props} />;
               }}
             />
-          </CodigoPostalState>
-          <AlicuotaState>
+            <ClienteState>
+              <Route
+                path="/stg/clientes"
+                render={(props) => {
+                  return <Clientes {...props} />;
+                }}
+              />
+            </ClienteState>
+            <ProvinciaState>
+              <Route
+                path="/stg/provincias"
+                render={(props) => {
+                  return <Provincias {...props} />;
+                }}
+              />
+            </ProvinciaState>
+            <CodigoPostalState>
+              <Route
+                path="/stg/codigospostales"
+                render={(props) => {
+                  return <CodigosPostales {...props} />;
+                }}
+              />
+            </CodigoPostalState>
+            <AlicuotaState>
+              <Route
+                path="/stg/alicuotasiva"
+                render={(props) => {
+                  return <Alicuotas {...props} />;
+                }}
+              />
+            </AlicuotaState>
+            <CondicionIVAState>
+              <Route
+                path="/stg/condicioniva"
+                render={(props) => {
+                  return <CondicionIVA {...props} />;
+                }}
+              />
+            </CondicionIVAState>
             <Route
-              path="/stg/alicuotasiva"
+              path="/stg/agencia"
               render={(props) => {
-                return <Alicuotas {...props} />;
+                return <Agencias {...props} />;
               }}
             />
-          </AlicuotaState>
-          <CondicionIVAState>
-            <Route
-              path="/stg/condicioniva"
-              render={(props) => {
-                return <CondicionIVA {...props} />;
-              }}
-            />
-          </CondicionIVAState>
-          <Route
-            path="/stg/agencia"
-            render={(props) => {
-              return <Agencias {...props} />;
-            }}
-          />
-          <CobradorState>
-            <Route
-              path="/stg/cobradores"
-              render={(props) => {
-                return <Cobradores {...props} />;
-              }}
-            />
-          </CobradorState>
+            <CobradorState>
+              <Route
+                path="/stg/cobradores"
+                render={(props) => {
+                  return <Cobradores {...props} />;
+                }}
+              />
+            </CobradorState>
 
-          <ZonaState>
+            <ZonaState>
+              <Route
+                path="/stg/zonas"
+                render={(props) => {
+                  return <Zonas {...props} />;
+                }}
+              />
+            </ZonaState>
+
+            <TarifaState>
+              <Route
+                path="/stg/tarifas"
+                render={(props) => {
+                  return <Tarifas {...props} />;
+                }}
+              />
+            </TarifaState>
+
             <Route
-              path="/stg/zonas"
+              path="/stg/agencias"
               render={(props) => {
-                return <Zonas {...props} />;
+                return <Agencias {...props} />;
               }}
             />
-          </ZonaState>
-
-          <TarifaState>
-            <Route
-              path="/stg/tarifas"
-              render={(props) => {
-                return <Tarifas {...props} />;
-              }}
-            />
-          </TarifaState>
-
-          <Route
-            path="/stg/agencias"
-            render={(props) => {
-              return <Agencias {...props} />;
-            }}
-          />
+          </Suspense>
         </div>
 
         <AppFooter />
