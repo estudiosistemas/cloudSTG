@@ -5,6 +5,9 @@ import {
   Redirect,
   useHistory,
 } from "react-router-dom";
+
+import "primereact/resources/themes/nova-light/theme.css";
+
 import classNames from "classnames";
 import { retry } from "../common/CoustomFunctions";
 

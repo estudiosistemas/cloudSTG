@@ -1,4 +1,7 @@
 const path = require("path");
+const webpack = require("webpack");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  .BundleAnalyzerPlugin;
 
 module.exports = {
   entry: path.resolve(__dirname, "src/index.js"),
@@ -42,4 +45,8 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new BundleAnalyzerPlugin({ analyzerPort: 7777 }),
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /(en|es)$/),
+  ],
 };

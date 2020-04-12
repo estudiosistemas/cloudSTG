@@ -8,7 +8,6 @@ import Spinner from "./layout/Spinner";
 const Landing = lazy(() => import("./landing/Landing"));
 
 //primereact
-import "primereact/resources/themes/nova-light/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
@@ -21,8 +20,8 @@ import "./App.scss";
 
 import Alertas from "./layout/Alertas";
 import Login from "./accounts/Login";
-import Stg from "./layout/Stg";
-//const Stg = lazy(() => retry(() => import("./layout/Stg")));
+//import Stg from "./layout/Stg";
+const Stg = lazy(() => import("./layout/Stg"));
 
 //importar states
 import AuthState from "../context/auth/authState";
