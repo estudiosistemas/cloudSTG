@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from .api import Agencias_User, Cobrador_Agencia, Tarifa_Agencia, Zona_Agencia, CobradorViewSet, ZonaViewSet, TarifaViewSet, AgenciaViewSet, ImgAgenciaUpdateViewSet
+from .api import Agencias_User, Cobrador_Agencia, Tarifa_Agencia, Zona_Agencia, CobradorViewSet, ZonaViewSet, TarifaViewSet, AgenciaViewSet, ImgAgenciaUpdateViewSet, ConceptoComprobanteAPIView
 
 router = routers.DefaultRouter()
 router.register('api/agencias', AgenciaViewSet, 'agencias')
@@ -20,5 +20,6 @@ urlpatterns = [
     path('api/zona-agencia/<str:agencia>',
          Zona_Agencia.as_view(), name='zona_agencia'),
     path('', include(router.urls)),
-
+    path('api/conceptoscomprobante',
+         ConceptoComprobanteAPIView.as_view(), name='conceptoscomprobante'),
 ]

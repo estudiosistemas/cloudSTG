@@ -1,7 +1,15 @@
 from rest_framework import serializers
-from .models import Agencia, Cobrador, Tarifa, Zona
+from .models import Agencia, Cobrador, Tarifa, Zona, CONCEPTO_CHOICES, Comprobante_PtoVenta
 from bases.serializers import CodigoPostalSerializer
 from accounts.models import Profile
+
+
+# class ConceptoComprobanteSerializer(serializers.ListSerializer):
+#     concepto = serializers.ChoiceField(
+#         choices=CONCEPTO_CHOICES)
+
+# class Meta:
+#    model = Comprobante_PtoVenta
 
 
 class AgenciaSerializer(serializers.ModelSerializer):

@@ -3,17 +3,24 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions, generics
 from rest_framework.response import Response
 from .serializers import Agencias_UserSerializer, CobradorSerializer, TarifaSerializer, ZonaSerializer, AgenciaSerializer, ImgAgenciaUpdateSerializer
-from .models import Cobrador, Tarifa, Zona, Agencia
+from .models import Cobrador, Tarifa, Zona, Agencia, Comprobante_PtoVenta, CONCEPTO_CHOICES
 from accounts.models import Profile
-from bases.api import GetPermisionViewSet
+from bases.api import GetPermisionViewSet, GetPermissionAPIView
 from rest_framework.views import APIView
 from rest_framework import viewsets, permissions
 
 
-class Agencias_User(APIView):
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+class ConceptoComprobanteAPIView(GetPermissionAPIView):
+    def get(self, request):
+        return Response(CONCEPTO_CHOICES)
+
+
+# class Comprobante_PtoVentaViewSet(GetPermisionViewSet):
+#     queryset = Comprobante_PtoVenta.objects.all()
+#     serializer_class = ConceptoComprobanteSerializer
+
+
+class Agencias_User(GetPermissionAPIView):
 
     def get(self, request, codigo):
         agen = get_object_or_404(Profile, user_id=codigo)

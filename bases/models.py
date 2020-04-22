@@ -95,11 +95,14 @@ class Tipo_Documento(models.Model):
         verbose_name_plural = "Tipos de Documentos"
 
 
+TIPO_COMPROBANTE_CHOICES = [
+    ('D', 'Débito'),
+    ('C', 'Crédito'),
+    ('N', 'No determinado'),
+]
+
+
 class Comprobante(MyModel):
-    TIPO_COMPROBANTE_CHOICES = [
-        ('D', 'Débito'),
-        ('C', 'Crédito'),
-    ]
     codigo_AFIP = models.CharField(max_length=3, null=True, blank=True)
     descripcion = models.CharField(max_length=100)
     tipo_comprobante = models.CharField(

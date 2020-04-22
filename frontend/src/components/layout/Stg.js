@@ -1,25 +1,13 @@
 import React, { useState, useEffect, useContext, lazy, Suspense } from "react";
-import {
-  HashRouter as Router,
-  Route,
-  Redirect,
-  useHistory,
-} from "react-router-dom";
-
-import "primereact/resources/themes/nova-light/theme.css";
+import { Route, Redirect, useHistory } from "react-router-dom";
 
 import classNames from "classnames";
+import "primereact/resources/themes/nova-light/theme.css";
+
 import { retry } from "../common/CoustomFunctions";
 
 //importar states
-import ProvinciaState from "../../context/tablas/provincias/provinciaState";
-import AlicuotaState from "../../context/tablas/alicuotas/alicuotaState";
-import CodigoPostalState from "../../context/tablas/codigos_postales/codigopostalState";
-import CondicionIVAState from "../../context/tablas/condicionIVA/condicionIVAState";
 import ClienteState from "../../context/clientes/clienteState";
-import CobradorState from "../../context/agencias/cobradores/cobradorState";
-import ZonaState from "../../context/agencias/zonas/zonaState";
-import TarifaState from "../../context/agencias/tarifas/tarifaState";
 
 //importar contexts
 import notificacionContext from "../../context/notificaciones/notificacionContext";
@@ -35,28 +23,19 @@ import AppProfile from "./AppProfile";
 import AppFooter from "./AppFooter";
 import Spinner from "./Spinner";
 //const AppFooter = lazy(() => retry(() => import("./AppFooter")));
-const Alicuotas = lazy(() => retry(() => import("../bases/tablas/Alicuotas")));
-const CodigosPostales = lazy(() =>
-  retry(() => import("../bases/tablas/CodigosPostales"))
-);
-const CondicionIVA = lazy(() =>
-  retry(() => import("../bases/tablas/CondicionIVA"))
-);
 const Profile = lazy(() => retry(() => import("../accounts/Profile")));
 const Clientes = lazy(() => retry(() => import("../clientes/Clientes")));
-const Provincias = lazy(() =>
-  retry(() => import("../bases/tablas/Provincias"))
+// const Provincias = lazy(() =>
+//   retry(() => import("../bases/tablas/Provincias"))
+// );
+const Tablas = lazy(() => retry(() => import("../bases/tablas/Tablas_Loader")));
+const Agencias_Loader = lazy(() =>
+  retry(() => import("../agencias/Agencias_Loader"))
 );
-const Agencias = lazy(() => retry(() => import("../agencias/Agencias")));
 const Notificaciones = lazy(() =>
   retry(() => import("../notificaciones/Notificaciones"))
 );
 const Dashboard = lazy(() => retry(() => import("./Dashboard")));
-const Cobradores = lazy(() =>
-  retry(() => import("../agencias/cobradores/Cobradores"))
-);
-const Zonas = lazy(() => retry(() => import("../agencias/zonas/Zonas")));
-const Tarifas = lazy(() => retry(() => import("../agencias/tarifas/Tarifas")));
 
 const Stg = (props) => {
   const [layoutMode, setlayoutMode] = useState("static");
@@ -208,83 +187,67 @@ const Stg = (props) => {
             history.push("/stg/condicioniva");
           },
         },
-      ],
-    },
-    {
-      label: "Components",
-      icon: "pi pi-fw pi-globe",
-      badge: "9",
-      items: [
-        { label: "Sample Page", icon: "pi pi-fw pi-th-large", to: "/sample" },
-        { label: "Forms", icon: "pi pi-fw pi-file", to: "/forms" },
-        { label: "Data", icon: "pi pi-fw pi-table", to: "/data" },
-        { label: "Panels", icon: "pi pi-fw pi-list", to: "/panels" },
-        { label: "Overlays", icon: "pi pi-fw pi-clone", to: "/overlays" },
-        { label: "Menus", icon: "pi pi-fw pi-plus", to: "/menus" },
-        { label: "Messages", icon: "pi pi-fw pi-spinner", to: "/messages" },
-        { label: "Charts", icon: "pi pi-fw pi-chart-bar", to: "/charts" },
-        { label: "Misc", icon: "pi pi-fw pi-upload", to: "/misc" },
-      ],
-    },
-    {
-      label: "Template Pages",
-      icon: "pi pi-fw pi-file",
-      items: [
-        { label: "Empty Page", icon: "pi pi-fw pi-circle-off", to: "/empty" },
-      ],
-    },
-    {
-      label: "Menu Hierarchy",
-      icon: "pi pi-fw pi-search",
-      items: [
         {
-          label: "Submenu 1",
-          icon: "pi pi-fw pi-bookmark",
-          items: [
-            {
-              label: "Submenu 1.1",
-              icon: "pi pi-fw pi-bookmark",
-              items: [
-                { label: "Submenu 1.1.1", icon: "pi pi-fw pi-bookmark" },
-                { label: "Submenu 1.1.2", icon: "pi pi-fw pi-bookmark" },
-                { label: "Submenu 1.1.3", icon: "pi pi-fw pi-bookmark" },
-              ],
-            },
-            {
-              label: "Submenu 1.2",
-              icon: "pi pi-fw pi-bookmark",
-              items: [
-                { label: "Submenu 1.2.1", icon: "pi pi-fw pi-bookmark" },
-                { label: "Submenu 1.2.2", icon: "pi pi-fw pi-bookmark" },
-              ],
-            },
-          ],
-        },
-        {
-          label: "Submenu 2",
-          icon: "pi pi-fw pi-bookmark",
-          items: [
-            {
-              label: "Submenu 2.1",
-              icon: "pi pi-fw pi-bookmark",
-              items: [
-                { label: "Submenu 2.1.1", icon: "pi pi-fw pi-bookmark" },
-                { label: "Submenu 2.1.2", icon: "pi pi-fw pi-bookmark" },
-                { label: "Submenu 2.1.3", icon: "pi pi-fw pi-bookmark" },
-              ],
-            },
-            {
-              label: "Submenu 2.2",
-              icon: "pi pi-fw pi-bookmark",
-              items: [
-                { label: "Submenu 2.2.1", icon: "pi pi-fw pi-bookmark" },
-                { label: "Submenu 2.2.2", icon: "pi pi-fw pi-bookmark" },
-              ],
-            },
-          ],
+          label: "Comprobantes",
+          icon: "pi pi-fw pi-bars",
+          command: () => {
+            history.push("/stg/comprobantes");
+          },
         },
       ],
     },
+    // {
+    //   label: "Menu Hierarchy",
+    //   icon: "pi pi-fw pi-search",
+    //   items: [
+    //     {
+    //       label: "Submenu 1",
+    //       icon: "pi pi-fw pi-bookmark",
+    //       items: [
+    //         {
+    //           label: "Submenu 1.1",
+    //           icon: "pi pi-fw pi-bookmark",
+    //           items: [
+    //             { label: "Submenu 1.1.1", icon: "pi pi-fw pi-bookmark" },
+    //             { label: "Submenu 1.1.2", icon: "pi pi-fw pi-bookmark" },
+    //             { label: "Submenu 1.1.3", icon: "pi pi-fw pi-bookmark" },
+    //           ],
+    //         },
+    //         {
+    //           label: "Submenu 1.2",
+    //           icon: "pi pi-fw pi-bookmark",
+    //           items: [
+    //             { label: "Submenu 1.2.1", icon: "pi pi-fw pi-bookmark" },
+    //             { label: "Submenu 1.2.2", icon: "pi pi-fw pi-bookmark" },
+    //           ],
+    //         },
+    //       ],
+    //     },
+    //     {
+    //       label: "Submenu 2",
+    //       icon: "pi pi-fw pi-bookmark",
+    //       items: [
+    //         {
+    //           label: "Submenu 2.1",
+    //           icon: "pi pi-fw pi-bookmark",
+    //           items: [
+    //             { label: "Submenu 2.1.1", icon: "pi pi-fw pi-bookmark" },
+    //             { label: "Submenu 2.1.2", icon: "pi pi-fw pi-bookmark" },
+    //             { label: "Submenu 2.1.3", icon: "pi pi-fw pi-bookmark" },
+    //           ],
+    //         },
+    //         {
+    //           label: "Submenu 2.2",
+    //           icon: "pi pi-fw pi-bookmark",
+    //           items: [
+    //             { label: "Submenu 2.2.1", icon: "pi pi-fw pi-bookmark" },
+    //             { label: "Submenu 2.2.2", icon: "pi pi-fw pi-bookmark" },
+    //           ],
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // },
   ];
 
   const addClass = (element, className) => {
@@ -335,10 +298,10 @@ const Stg = (props) => {
     cargarUsuario();
   }, [isAuthenticated]);
 
-  const logo =
-    layoutColorMode === "dark"
-      ? "assets/layout/images/logo-white.svg"
-      : "assets/layout/images/logo.svg";
+  // const logo =
+  //   layoutColorMode === "dark"
+  //     ? "assets/layout/images/logo-white.svg"
+  //     : "assets/layout/images/logo.svg";
 
   const wrapperClass = classNames("layout-wrapper", {
     "layout-overlay": layoutMode === "overlay",
@@ -381,6 +344,8 @@ const Stg = (props) => {
                 return <Dashboard {...props} />;
               }}
             />
+            <Tablas />
+            <Agencias_Loader />
             <Route
               path="/stg/profile"
               render={(props) => {
@@ -401,77 +366,6 @@ const Stg = (props) => {
                 }}
               />
             </ClienteState>
-            <ProvinciaState>
-              <Route
-                path="/stg/provincias"
-                render={(props) => {
-                  return <Provincias {...props} />;
-                }}
-              />
-            </ProvinciaState>
-            <CodigoPostalState>
-              <Route
-                path="/stg/codigospostales"
-                render={(props) => {
-                  return <CodigosPostales {...props} />;
-                }}
-              />
-            </CodigoPostalState>
-            <AlicuotaState>
-              <Route
-                path="/stg/alicuotasiva"
-                render={(props) => {
-                  return <Alicuotas {...props} />;
-                }}
-              />
-            </AlicuotaState>
-            <CondicionIVAState>
-              <Route
-                path="/stg/condicioniva"
-                render={(props) => {
-                  return <CondicionIVA {...props} />;
-                }}
-              />
-            </CondicionIVAState>
-            <Route
-              path="/stg/agencia"
-              render={(props) => {
-                return <Agencias {...props} />;
-              }}
-            />
-            <CobradorState>
-              <Route
-                path="/stg/cobradores"
-                render={(props) => {
-                  return <Cobradores {...props} />;
-                }}
-              />
-            </CobradorState>
-
-            <ZonaState>
-              <Route
-                path="/stg/zonas"
-                render={(props) => {
-                  return <Zonas {...props} />;
-                }}
-              />
-            </ZonaState>
-
-            <TarifaState>
-              <Route
-                path="/stg/tarifas"
-                render={(props) => {
-                  return <Tarifas {...props} />;
-                }}
-              />
-            </TarifaState>
-
-            <Route
-              path="/stg/agencias"
-              render={(props) => {
-                return <Agencias {...props} />;
-              }}
-            />
           </Suspense>
         </div>
 

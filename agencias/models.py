@@ -32,17 +32,32 @@ class Agencia(MyModel):
         ordering = ('nombre',)
 
 
-class Comprobante_PtoVenta(MyModel):
+CONCEPTO_CHOICES = (
+    (1, 'Servicios'),
+    (2, 'Productos'),
+    (3, 'Productos y Servicios')
+)
+
+# Punto de Venta
+
+
+class Punto_Venta(models.Model):
+
     agencia = models.ForeignKey(Agencia, on_delete=models.CASCADE)
-    comprobante = models.ForeignKey(Comprobante, on_delete=models.CASCADE)
     punto_venta = models.IntegerField(default=1)
+    descripcion = models.CharField(max_length=100, null=False, blank=False)
+    concepto = models.IntegerField(choices=CONCEPTO_CHOICES)
+
+
+class Comprobante_PtoVenta(MyModel):
+    punto_venta = models.ForeignKey(Punto_Venta, on_delete=models.CASCADE)
+    comprobante = models.ForeignKey(Comprobante, on_delete=models.CASCADE)
     numero = models.IntegerField(default=1)
 
     def __str__(self):
         return "{0:0>5}".format(self.punto_venta)
 
     class Meta:
-        unique_together = (("agencia", "comprobante", "punto_venta"),)
         verbose_name_plural = "Puntos Venta por Comprobante"
 
 

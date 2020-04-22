@@ -2,14 +2,16 @@ from django.db import models
 from django.contrib.auth.models import User
 from bases.models import MyModel
 
+PRIORIDAD_CHOICES = [
+    ('B', 'Baja'),
+    ('M', 'Media'),
+    ('A', 'Alta'),
+]
 
 # MODELO NOTIFICACIONES
+
+
 class Notificacion(MyModel):
-    PRIORIDAD_CHOICES = [
-        ('B', 'Baja'),
-        ('M', 'Media'),
-        ('A', 'Alta'),
-    ]
     asunto = models.CharField(max_length=50)
     mensaje = models.CharField(max_length=250)
     prioridad = models.CharField(
