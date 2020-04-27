@@ -21,7 +21,12 @@ class PuntoVentaSerializer(DefaultModelSerializer):
         return ptoventa
 
     def update(self, instance, validated_data):
+        instance.punto_venta = validated_data['punto_venta']
+        instance.descripcion = validated_data['descripcion']
+        instance.concepto = validated_data['concepto']
+        instance.estado = validated_data['estado']
         estado = validated_data['estado']
+        instance.save()
         ptoventa = Punto_Venta.objects.get(pk=instance.id)
         # Para todos los comprobantes en el pto venta seleccionado, actualizo el estado
         Comprobante_PtoVenta.objects.filter(punto_venta=ptoventa).update(

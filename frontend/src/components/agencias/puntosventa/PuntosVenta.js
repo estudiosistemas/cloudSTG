@@ -73,6 +73,10 @@ function PuntosVenta(props) {
     );
   };
 
+  const puntoventaTemplate = (rowData) => (
+    <span>{rowData.punto_venta.toString().padStart(5, 0)}</span>
+  );
+
   const actionTemplate = (rowData, column) => {
     return (
       <TablasActionTemplate
@@ -180,6 +184,7 @@ function PuntosVenta(props) {
                 <Column
                   field="punto_venta"
                   header="Punto Venta"
+                  body={puntoventaTemplate}
                   sortable={true}
                   style={{ textAlign: "center" }}
                 />

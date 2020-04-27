@@ -88,32 +88,34 @@ function Comprobantes(props) {
     return (
       <div className="p-grid p-fluid" style={{ padding: "2em 1em 1em 1em" }}>
         <div className="p-col">
-          {puntos.map((punto) => (
-            <div key={punto.id} className="p-grid p-align-center">
-              <div className="p-md-2">Punto de Venta: </div>
-              <div className="p-md-4" style={{ fontWeight: "bold" }}>
-                {punto.punto_venta.punto_venta.toString().padStart(5, 0)} -{" "}
-                {punto.punto_venta.descripcion}
+          {puntos.map((punto) =>
+            punto.estado ? (
+              <div key={punto.id} className="p-grid p-align-center">
+                <div className="p-md-2">Punto de Venta: </div>
+                <div className="p-md-4" style={{ fontWeight: "bold" }}>
+                  {punto.punto_venta.punto_venta.toString().padStart(5, 0)} -{" "}
+                  {punto.punto_venta.descripcion}
+                </div>
+                <div className="p-md-1">Número: </div>
+                <div className="p-md-2" style={{ fontWeight: "bold" }}>
+                  <InputText
+                    name={punto.id}
+                    onChange={onChange}
+                    keyfilter="pnum"
+                    placeholder={punto.numero}
+                  />
+                </div>
+                <div className="p-md-2">
+                  <Button
+                    tooltip="Grabar"
+                    icon="pi pi-save"
+                    className="p-button-success"
+                    onClick={() => grabarNumero(punto.id)}
+                  />
+                </div>
               </div>
-              <div className="p-md-1">Número: </div>
-              <div className="p-md-2" style={{ fontWeight: "bold" }}>
-                <InputText
-                  name={punto.id}
-                  onChange={onChange}
-                  keyfilter="pnum"
-                  placeholder={punto.numero}
-                />
-              </div>
-              <div className="p-md-2">
-                <Button
-                  tooltip="Grabar"
-                  icon="pi pi-save"
-                  className="p-button-success"
-                  onClick={() => grabarNumero(punto.id)}
-                />
-              </div>
-            </div>
-          ))}
+            ) : null
+          )}
         </div>
       </div>
     );
