@@ -6,11 +6,15 @@ import { retry } from "../common/CoustomFunctions";
 import CobradorState from "../../context/agencias/cobradores/cobradorState";
 import ZonaState from "../../context/agencias/zonas/zonaState";
 import TarifaState from "../../context/agencias/tarifas/tarifaState";
+import PuntoVentaState from "../../context/agencias/puntosventa/puntoventaState";
 
 const Agencias = lazy(() => retry(() => import("./Agencias")));
 const Cobradores = lazy(() => retry(() => import("./cobradores/Cobradores")));
 const Zonas = lazy(() => retry(() => import("./zonas/Zonas")));
 const Tarifas = lazy(() => retry(() => import("./tarifas/Tarifas")));
+const PuntosVenta = lazy(() =>
+  retry(() => import("./puntosventa/PuntosVenta"))
+);
 
 const Agencias_Loader = () => {
   return (
@@ -21,6 +25,14 @@ const Agencias_Loader = () => {
           return <Agencias {...props} />;
         }}
       />
+      <PuntoVentaState>
+        <Route
+          path="/stg/puntosventa"
+          render={(props) => {
+            return <PuntosVenta {...props} />;
+          }}
+        />
+      </PuntoVentaState>
       <CobradorState>
         <Route
           path="/stg/cobradores"

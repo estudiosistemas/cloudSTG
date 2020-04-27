@@ -8,9 +8,9 @@ import Spinner from "./layout/Spinner";
 const Landing = lazy(() => import("./landing/Landing"));
 
 //primereact
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
-import "primeflex/primeflex.css";
+//import "primereact/resources/primereact.min.css";
+//import "primeicons/primeicons.css";
+//import "primeflex/primeflex.css";
 // import "@fullcalendar/core/main.css";
 // import "@fullcalendar/daygrid/main.css";
 // import "@fullcalendar/timegrid/main.css";

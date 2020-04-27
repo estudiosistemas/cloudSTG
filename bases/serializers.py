@@ -2,6 +2,7 @@ import six
 from rest_framework import serializers
 from rest_framework.fields import ChoiceField
 from .models import Provincia, Alicuota_IVA, Codigo_Postal, Condicion_IVA, Tipo_Documento, Comprobante
+from agencias.models import Punto_Venta, Comprobante_PtoVenta
 
 
 class ChoiceDisplayField(ChoiceField):
@@ -28,6 +29,17 @@ class ComprobanteSerializer(DefaultModelSerializer):
     class Meta:
         model = Comprobante
         fields = '__all__'
+
+    def create(self, validated_data):
+        # Grabo el comprobante
+        comprobante = Comprobante(**validated_data)
+        comprobante.save()
+        # Recorro los puntos de venta y grabo en PuntoVenta_Comprobante
+        puntoventa = Punto_Venta.objects.all()
+        for punto in puntoventa:
+            Comprobante_PtoVenta.objects.create(
+                punto_venta=punto, comprobante=comprobante, numero=1, estado=punto.estado)
+        return comprobante
 
 
 class ProvinciaSerializer(serializers.ModelSerializer):

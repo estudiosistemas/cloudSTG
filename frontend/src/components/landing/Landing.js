@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 
-import "../../../static/frontend/css/bootstrap.min.css";
+//import "../../../static/frontend/css/bootstrap.min.css";
 import "./scss/landing-page.scss";
 
 const Landing = () => {

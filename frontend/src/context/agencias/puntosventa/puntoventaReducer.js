@@ -6,8 +6,7 @@ import {
   ADD,
   UPDATE,
   SET,
-  GET_PUNTOVENTA,
-  UPDATE_PUNTOVENTA,
+  TOGGLE_ESTADO,
 } from "../../../types/crud";
 
 export default (state, action) => {
@@ -20,44 +19,39 @@ export default (state, action) => {
     case SET:
       return {
         ...state,
-        comprobante: action.payload,
+        puntoventa: action.payload,
       };
     case GET:
       return {
         ...state,
-        comprobantes: action.payload,
+        puntosventa: action.payload,
       };
     case DELETE:
       return {
         ...state,
-        comprobantes: state.comprobantes.filter(
-          (comp) => comp.id !== action.payload
+        puntosventa: state.puntosventa.filter(
+          (puntoventa) => puntoventa.id !== action.payload
         ),
       };
     case ADD:
       return {
         ...state,
-        comprobantes: [...state.comprobantes, action.payload],
+        puntosventa: [...state.puntosventa, action.payload],
         showForm: false,
       };
     case UPDATE:
       return {
         ...state,
-        comprobantes: state.comprobantes.map((comp) =>
-          comp.id === action.payload.id ? action.payload : comp
+        puntosventa: state.puntosventa.map((puntoventa) =>
+          puntoventa.id === action.payload.id ? action.payload : puntoventa
         ),
         showForm: false,
       };
-    case GET_PUNTOVENTA:
+    case TOGGLE_ESTADO:
       return {
         ...state,
-        puntosVenta_Comprobante: action.payload,
-      };
-    case UPDATE_PUNTOVENTA:
-      return {
-        ...state,
-        puntosVenta_Comprobante: state.puntosVenta_Comprobante.map((comp) =>
-          comp.id === action.payload.id ? action.payload : comp
+        puntosventa: state.puntosventa.map((puntoventa) =>
+          puntoventa.id === action.payload.id ? action.payload : puntoventa
         ),
       };
     default:

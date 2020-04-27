@@ -41,12 +41,18 @@ CONCEPTO_CHOICES = (
 # Punto de Venta
 
 
-class Punto_Venta(models.Model):
+class Punto_Venta(MyModel):
 
     agencia = models.ForeignKey(Agencia, on_delete=models.CASCADE)
     punto_venta = models.IntegerField(default=1)
     descripcion = models.CharField(max_length=100, null=False, blank=False)
     concepto = models.IntegerField(choices=CONCEPTO_CHOICES)
+
+    def __str__(self):
+        return "Agencia: {0} - Pto. Venta: {1:0>5}".format(self.agencia, self.punto_venta)
+
+    class Meta:
+        verbose_name_plural = "Puntos Venta"
 
 
 class Comprobante_PtoVenta(MyModel):
@@ -55,10 +61,10 @@ class Comprobante_PtoVenta(MyModel):
     numero = models.IntegerField(default=1)
 
     def __str__(self):
-        return "{0:0>5}".format(self.punto_venta)
+        return "{0} - Comprobante: {1}".format(self.punto_venta, self.comprobante)
 
     class Meta:
-        verbose_name_plural = "Puntos Venta por Comprobante"
+        verbose_name_plural = "Puntos de Venta por Comprobante"
 
 
 # MODELO Cobrador

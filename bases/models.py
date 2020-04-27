@@ -8,8 +8,9 @@ from PIL import Image
 
 class MyModel(models.Model):
     estado = models.BooleanField(default=True)
-    fc = models.DateTimeField(auto_now_add=True)
-    fm = models.DateTimeField(auto_now=True)
+    fc = models.DateTimeField(
+        auto_now_add=True, blank=True)
+    fm = models.DateTimeField(auto_now=True, blank=True)
     uc = UserForeignKey(auto_user_add=True, related_name="+")
     um = UserForeignKey(auto_user=True, related_name="+")
 

@@ -1,24 +1,11 @@
 import React, { useContext } from "react";
 
 import notificacionContext from "../../context/notificaciones/notificacionContext";
-import useChoiceList from "../../hooks/useChoiceList";
 
 const Dashboard = () => {
   //notificacion state
   const notificacionCtx = useContext(notificacionContext);
   const { nuevasNotificaciones } = notificacionCtx;
-
-  //usar custom hook
-  const [
-    stateConcepto,
-    SelectConcepto,
-    actualizarStateConcepto,
-  ] = useChoiceList("conceptocomprobante", {});
-
-  const [stateTipo, SelectTipo, actualizarStateTipo] = useChoiceList(
-    "tipocomprobante",
-    {}
-  );
 
   return (
     <div className="p-grid p-fluid dashboard">
@@ -45,10 +32,6 @@ const Dashboard = () => {
           <span className="detail">Total facturado del día</span>
           <span className="count visitors">$ 35,200</span>
         </div>
-      </div>
-      <div>
-        <SelectConcepto />
-        <SelectTipo />
       </div>
     </div>
   );

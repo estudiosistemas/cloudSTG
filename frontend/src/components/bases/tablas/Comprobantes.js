@@ -15,19 +15,27 @@ import ComprobantesForm from "./ComprobantesForm";
 function Comprobantes(props) {
   const [sidebarState, setSideBarState] = useState({ visible: false });
   const [editar, setEditar] = useState(false);
+  const [numCompro, setNumCompro] = useState({
+    id: null,
+    numero: null,
+  });
 
   //Datatable State
   const [globalFilter, setglobalFilter] = useState("");
   const [selectedItem, setSelectedItem] = useState({});
+  const [expandedRows, setExpandedRows] = useState({});
 
   //local state
   const comprobanteCtx = useContext(comprobanteContext);
   const {
     comprobantes,
+    puntosVenta_Comprobante,
     mostrarFormulario,
     getComprobantes,
     deleteComprobante,
     setComprobante,
+    getPuntoVenta_Comprobantes,
+    updateComprobantePtoVenta,
   } = comprobanteCtx;
 
   const handleAgregar = () => {
@@ -61,8 +69,59 @@ function Comprobantes(props) {
     setSideBarState({ visible: !sidebarState.visible });
   };
 
+  const grabarNumero = (id) => {
+    if (id == numCompro.id) {
+      updateComprobantePtoVenta(numCompro);
+    }
+  };
+
+  const onChange = (e) => {
+    setNumCompro({ id: parseInt(e.target.name), numero: e.target.value });
+  };
+
+  let dt = React.createRef();
+
+  const rowExpansionTemplate = (data) => {
+    const puntos = puntosVenta_Comprobante.filter(
+      (comp) => comp.comprobante == data.id
+    );
+    return (
+      <div className="p-grid p-fluid" style={{ padding: "2em 1em 1em 1em" }}>
+        <div className="p-col">
+          {puntos.map((punto) => (
+            <div key={punto.id} className="p-grid p-align-center">
+              <div className="p-md-2">Punto de Venta: </div>
+              <div className="p-md-4" style={{ fontWeight: "bold" }}>
+                {punto.punto_venta.punto_venta.toString().padStart(5, 0)} -{" "}
+                {punto.punto_venta.descripcion}
+              </div>
+              <div className="p-md-1">Número: </div>
+              <div className="p-md-2" style={{ fontWeight: "bold" }}>
+                <InputText
+                  name={punto.id}
+                  onChange={onChange}
+                  keyfilter="pnum"
+                  placeholder={punto.numero}
+                />
+              </div>
+              <div className="p-md-2">
+                <Button
+                  tooltip="Grabar"
+                  icon="pi pi-save"
+                  className="p-button-success"
+                  onClick={() => grabarNumero(punto.id)}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   useEffect(() => {
     getComprobantes();
+    getPuntoVenta_Comprobantes();
   }, []);
 
   return (
@@ -110,9 +169,15 @@ function Comprobantes(props) {
               paginator={true}
               rows={10}
               rowsPerPageOptions={[5, 10, 20, 50]}
+              expandedRows={expandedRows}
+              onRowToggle={(e) => setExpandedRows(e.data)}
+              rowExpansionTemplate={rowExpansionTemplate}
               sortField="id"
               sortOrder={1}
+              dataKey="id"
+              responsive
             >
+              <Column expander={true} style={{ width: "3em" }} />
               <Column
                 field="id"
                 header="Id"

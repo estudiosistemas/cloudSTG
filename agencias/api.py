@@ -2,10 +2,10 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets, permissions, generics
 from rest_framework.response import Response
-from .serializers import Agencias_UserSerializer, CobradorSerializer, TarifaSerializer, ZonaSerializer, AgenciaSerializer, ImgAgenciaUpdateSerializer
-from .models import Cobrador, Tarifa, Zona, Agencia, Comprobante_PtoVenta, CONCEPTO_CHOICES
+from .serializers import Agencias_UserSerializer, CobradorSerializer, TarifaSerializer, ZonaSerializer, AgenciaSerializer, ImgAgenciaUpdateSerializer, PuntoVentaSerializer, Comprobante_PtoVentaSerializer
+from .models import Cobrador, Tarifa, Zona, Agencia, Comprobante_PtoVenta, CONCEPTO_CHOICES, Punto_Venta, Comprobante_PtoVenta
 from accounts.models import Profile
-from bases.api import GetPermisionViewSet, GetPermissionAPIView
+from bases.api import GetPermisionViewSet, GetPermissionAPIView, GetPermissionListAPIView
 from rest_framework.views import APIView
 from rest_framework import viewsets, permissions
 
@@ -15,9 +15,30 @@ class ConceptoComprobanteAPIView(GetPermissionAPIView):
         return Response(CONCEPTO_CHOICES)
 
 
-# class Comprobante_PtoVentaViewSet(GetPermisionViewSet):
-#     queryset = Comprobante_PtoVenta.objects.all()
-#     serializer_class = ConceptoComprobanteSerializer
+class Comprobante_PtoVenta_Agencia(GetPermissionListAPIView):
+    serializer_class = Comprobante_PtoVentaSerializer
+
+    def get_queryset(self):
+        agen = self.kwargs['agencia']
+        return Comprobante_PtoVenta.objects.filter(punto_venta__agencia=agen).order_by('punto_venta')
+
+
+class Comprobante_PtoVentaViewSet(GetPermisionViewSet):
+    serializer_class = Comprobante_PtoVentaSerializer
+    queryset = Comprobante_PtoVenta.objects.all().order_by('punto_venta')
+
+
+class PuntoVentaViewSet(GetPermisionViewSet):
+    serializer_class = PuntoVentaSerializer
+    queryset = Punto_Venta.objects.all().order_by('punto_venta')
+
+
+class PuntoVenta_Agencia(GetPermissionListAPIView):
+    serializer_class = PuntoVentaSerializer
+
+    def get_queryset(self):
+        agen = self.kwargs['agencia']
+        return Punto_Venta.objects.filter(agencia=agen)
 
 
 class Agencias_User(GetPermissionAPIView):
@@ -44,8 +65,7 @@ class CobradorViewSet(GetPermisionViewSet):
     queryset = Cobrador.objects.all().order_by('nombre')
 
 
-class Cobrador_Agencia(generics.ListAPIView):
-    permission_classes = [permissions.AllowAny]
+class Cobrador_Agencia(GetPermissionListAPIView):
     serializer_class = CobradorSerializer
 
     def get_queryset(self):
@@ -58,8 +78,7 @@ class TarifaViewSet(GetPermisionViewSet):
     queryset = Tarifa.objects.all().order_by('nombre')
 
 
-class Tarifa_Agencia(generics.ListAPIView):
-    permission_classes = [permissions.AllowAny]
+class Tarifa_Agencia(GetPermissionListAPIView):
     serializer_class = TarifaSerializer
 
     def get_queryset(self):
@@ -72,8 +91,7 @@ class ZonaViewSet(GetPermisionViewSet):
     queryset = Zona.objects.all().order_by('nombre')
 
 
-class Zona_Agencia(generics.ListAPIView):
-    permission_classes = [permissions.AllowAny]
+class Zona_Agencia(GetPermissionListAPIView):
     serializer_class = ZonaSerializer
 
     def get_queryset(self):

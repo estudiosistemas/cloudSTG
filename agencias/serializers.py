@@ -1,22 +1,48 @@
 from rest_framework import serializers
-from .models import Agencia, Cobrador, Tarifa, Zona, CONCEPTO_CHOICES, Comprobante_PtoVenta
-from bases.serializers import CodigoPostalSerializer
+from .models import Agencia, Cobrador, Tarifa, Zona, CONCEPTO_CHOICES, Comprobante_PtoVenta, Punto_Venta
+from bases.serializers import DefaultModelSerializer, CodigoPostalSerializer, Comprobante
 from accounts.models import Profile
 
 
-# class ConceptoComprobanteSerializer(serializers.ListSerializer):
-#     concepto = serializers.ChoiceField(
-#         choices=CONCEPTO_CHOICES)
+class PuntoVentaSerializer(DefaultModelSerializer):
+    class Meta:
+        model = Punto_Venta
+        fields = '__all__'
 
-# class Meta:
-#    model = Comprobante_PtoVenta
+    def create(self, validated_data):
+        # Grabo el comprobante
+        ptoventa = Punto_Venta(**validated_data)
+        ptoventa.save()
+        # Recorro los comprobantes y grabo en PuntoVenta_Comprobante
+        comprobantes = Comprobante.objects.all()
+        for comprobante in comprobantes:
+            Comprobante_PtoVenta.objects.create(
+                punto_venta=ptoventa, comprobante=comprobante, numero=1)
+        return ptoventa
+
+    def update(self, instance, validated_data):
+        estado = validated_data['estado']
+        ptoventa = Punto_Venta.objects.get(pk=instance.id)
+        # Para todos los comprobantes en el pto venta seleccionado, actualizo el estado
+        Comprobante_PtoVenta.objects.filter(punto_venta=ptoventa).update(
+            estado=estado)
+        return instance
+
+
+class Comprobante_PtoVentaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comprobante_PtoVenta
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        self.fields['punto_venta'] = PuntoVentaSerializer(read_only=True)
+        return super(Comprobante_PtoVentaSerializer, self).to_representation(instance)
 
 
 class AgenciaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Agencia
-        #fields = '__all__'
         exclude = ['logo']
 
 

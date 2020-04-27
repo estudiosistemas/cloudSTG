@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, lazy, Suspense } from "react";
 import { Route, Redirect, useHistory } from "react-router-dom";
 
 import classNames from "classnames";
-import "primereact/resources/themes/nova-light/theme.css";
+//import "primereact/resources/themes/nova-light/theme.css";
 
 import { retry } from "../common/CoustomFunctions";
 
@@ -130,6 +130,13 @@ const Stg = (props) => {
           icon: "pi pi-fw pi-bars",
           command: () => {
             history.push("/stg/agencia");
+          },
+        },
+        {
+          label: "Puntos de Venta",
+          icon: "pi pi-fw pi-bars",
+          command: () => {
+            history.push("/stg/puntosventa");
           },
         },
         {

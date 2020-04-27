@@ -1,11 +1,22 @@
 from .models import Provincia, Alicuota_IVA, Codigo_Postal, Condicion_IVA, Tipo_Documento, Comprobante, TIPO_COMPROBANTE_CHOICES
 from .serializers import ProvinciaSerializer, AlicuotaIVASerializer, CodigoPostalSerializer, CondicionIVASerializer, TipoDocumentoSerializer, ComprobanteSerializer
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 
 class GetPermissionAPIView(APIView):
+    def get_permissions(self):
+        permission_classes = [permissions.AllowAny]
+
+        # if self.action == 'list':
+        #     permission_classes = [permissions.IsAuthenticated]
+        # else:
+        #     permission_classes = [permissions.IsAdminUser]
+        return [permission() for permission in permission_classes]
+
+
+class GetPermissionListAPIView(generics.ListAPIView):
     def get_permissions(self):
         permission_classes = [permissions.AllowAny]
 
