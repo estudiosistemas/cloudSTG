@@ -120,7 +120,6 @@ const PuntoVentaState = (props) => {
 
   //Cambio a inactivo
   const toggleEstadoPuntoVenta = (puntoventa) => {
-    console.log(puntoventa);
     const miPuntoVenta = {
       ...puntoventa,
       concepto: puntoventa.concepto.id,
@@ -128,7 +127,6 @@ const PuntoVentaState = (props) => {
     axios
       .put(`/api/puntosventa/${puntoventa.id}/`, miPuntoVenta, tokenConfig())
       .then((res) => {
-        console.log(res.data);
         dispatch({
           type: TOGGLE_ESTADO,
           payload: puntoventa,

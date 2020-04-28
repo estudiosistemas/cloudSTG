@@ -56,14 +56,22 @@ const Stg = (props) => {
 
   let history = useHistory();
 
+  let sidebar = React.createRef();
+
   const onWrapperClick = (event) => {
+    if (overlayMenuActive || mobileMenuActive) {
+      setoverlayMenuActive(false);
+      setmobileMenuActive(false);
+    }
+  };
+
+  //se activa cuando se actualiza el state de menuClick
+  useEffect(() => {
     if (!menuClick) {
       setoverlayMenuActive(false);
       setmobileMenuActive(false);
     }
-
-    setmenuClick(false);
-  };
+  }, [menuClick]);
 
   const onToggleMenu = (event) => {
     setmenuClick(true);
@@ -75,8 +83,8 @@ const Stg = (props) => {
         setstaticMenuInactive(!staticMenuInactive);
       }
     } else {
-      const mobileMenuActive = mobileMenuActive;
-      setmobileMenuActive(!mobileMenuActive);
+      const mobileMenuAct = mobileMenuActive;
+      setmobileMenuActive(!mobileMenuAct);
     }
     event.preventDefault();
   };
@@ -332,7 +340,11 @@ const Stg = (props) => {
       <div className={wrapperClass} onClick={onWrapperClick}>
         <AppTopbar onToggleMenu={onToggleMenu} />
 
-        <div className={sidebarClassName} onClick={onSidebarClick}>
+        <div
+          ref={(el) => (sidebar = el)}
+          className={sidebarClassName}
+          onClick={onSidebarClick}
+        >
           <div className="layout-logo">
             <h1>
               <span style={{ color: "#FFFFFF" }}>CloudSTG</span>
