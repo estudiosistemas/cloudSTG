@@ -145,3 +145,18 @@ class Empresa(MyModel):
 
     class Meta:
         verbose_name_plural = "Empresas"
+
+
+class Empresa_WS(models.Model):
+    empresa = models.OneToOneField(
+        Empresa, on_delete=models.CASCADE, primary_key=True)
+    homo = models.BooleanField(default=True)
+    afip_file_certificado = models.CharField(
+        max_length=255, blank=True, null=True)
+    afip_file_key = models.CharField(max_length=255, blank=True, null=True)
+    afip_ticket_expira = models.CharField(max_length=50, blank=True, null=True)
+    afip_ticket_token = models.TextField(blank=True, null=True)
+    afip_ticket_sign = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return '{}'.format(self.empresa.nombre)

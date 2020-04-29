@@ -1,6 +1,7 @@
 sigma-master
 settings_original.py
-runserver.bat
+*.bat
+*.pdf
 
 #frontend statics files
 frontend/static/frontend/dist

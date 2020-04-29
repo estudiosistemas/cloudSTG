@@ -19,7 +19,7 @@
     button {
       position: relative;
       color: $topbarItemColor;
-      margin-left: 20px;
+      margin-left: 10px;
       display: inline-block;
       text-decoration: none;
       @include transition(color $transitionDuration);
@@ -71,7 +71,7 @@
         -webkit-box-shadow: none;
         box-shadow: none;
         color: $topbarSearchInputColor;
-        width: 200px;
+        width: 150px;
         padding: 1px 20px 1px 1px;
         margin: 0px;
         @include border-radius(2px);

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'frontend',
     'notificaciones',
     'clientes',
+    'factura',
 ]
 
 REST_FRAMEWORK = {
